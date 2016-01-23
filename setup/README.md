@@ -1,3 +1,5 @@
+# Baseline setup
+
 1. Flash your SD card (assuming OS X):
     1. Get [Ubuntu MATE 15.10.1](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file
     1. `$ diskutil list` to check correct device
@@ -33,4 +35,23 @@
         NODM_ENABLED=true
         NODM_USER=pi
 
-1. Get default scripts with `$ wget https://github.com/futurice/chilipie-kiosk/archive/master.zip && cp chilipie-kiosk-master/dist/{*,.*} . && rm -rf chilipie-kiosk-master/ master.zip`
+1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/dist/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
+
+# Optional: WLAN
+
+1. Check the interface name with `$ ifconfig`, e.g. `wlan0`
+1. Append to `/etc/network/interfaces`:
+
+        allow-hotplug wlan0
+        iface wlan0 inet dhcp
+        wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+        iface default inet dhcp
+
+1. In `/etc/wpa_supplicant/wpa_supplicant.conf`:
+
+        network={
+            ssid="networkname"
+            psk="secretpassword"
+        }
+
+1. Reboot
