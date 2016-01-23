@@ -8,4 +8,6 @@ xset s noblank     # don't blank the video device
 
 unclutter -idle 5 -root & # hide cursor afer 5 seconds of inactivity
 
+~/on-pi-startup.sh &
+
 exec matchbox-window-manager -use_titlebar no
