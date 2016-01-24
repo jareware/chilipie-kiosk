@@ -38,6 +38,14 @@
         NODM_USER=pi
 
 1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
+1. Put in the example crontab with `$ crontab -e`:
+
+        # m h  dom mon dow   command
+        
+        # 0  7 * * 1-5 ~/display-on.sh  # turn display on weekdays at 7 AM
+        # 0 19 * * 1-5 ~/display-off.sh # turn display off weekdays at 7 PM
+
+1. Reboot (should land you in Chromium)
 1. Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk/blob/master/first-boot.md
 
 ## Optional: WLAN
@@ -62,4 +70,9 @@
 ## Preparing the image
 
 1. Disable SSH access (because the default credentials aren't very secure): `$ sudo systemctl disable ssh.service`
-1. TODO: Dump image
+1. Shut down the Raspberry Pi
+1. Dump the image to disk (assuming OS X):
+    1. `$ diskutil list` to check correct device
+    1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
+    1. `$ sudo dd bs=1m if=/dev/disk2 of=chilipie-kiosk-TAG.img`
+    1. `$ zip chilipie-kiosk-TAG.zip chilipie-kiosk-TAG.img`

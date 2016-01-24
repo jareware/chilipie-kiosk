@@ -1,4 +1,4 @@
-# Welcome to `chilipie-kiosk`
+# Welcome to chilipie-kiosk
 
 Looks like this might be your first boot! This document lists some things you can do to customize your kiosk. You'll want to plug in a keyboard at this point.
 
