@@ -23,3 +23,9 @@ Or, to enable it permanently:
     $ systemctl enable ssh.service
 
 Use `ifconfig` to figure out your IP address, and `ssh` in.
+
+## Controlling the display
+
+The scripts `~/display-on.sh` and `~/display-off.sh` control the HDMI output of the Raspberry Pi.
+
+There's also a sample configuration in the crontab (use `crontab -e` to uncomment it) for turning the display off outside of office hours.
