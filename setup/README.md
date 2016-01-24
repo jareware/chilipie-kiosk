@@ -21,7 +21,7 @@
     1. Reboot
 1. Clean up MATE's desktop cruft with `$ rm -rf ~/*`
 1. Install some packages we'll need:
-    1. `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter chromium-browser mailutils nitrogen`
+    1. `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter chromium-browser mailutils nitrogen jq`
     1. When mailutils prompts about its setup, "local only" is fine
 1. Make sure [automatic software updates are disabled](http://ask.xmodulo.com/disable-automatic-updates-ubuntu.html), in `/etc/apt/apt.conf.d/10periodic`:
 
@@ -36,6 +36,7 @@
         NODM_USER=pi
 
 1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/dist/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
+1. Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk
 
 # Optional: WLAN
 
