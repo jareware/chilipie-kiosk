@@ -35,7 +35,7 @@
         NODM_ENABLED=true
         NODM_USER=pi
 
-1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/dist/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
+1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
 1. Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk
 
 # Optional: WLAN
