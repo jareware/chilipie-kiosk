@@ -56,3 +56,8 @@
         }
 
 1. Reboot
+
+# Preparing the image
+
+1. Disable SSH access (because the default credentials aren't very secure): `$ sudo systemctl disable ssh.service`
+1. TODO: Dump image
