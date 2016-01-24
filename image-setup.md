@@ -1,4 +1,6 @@
-# Baseline setup
+# Image setup
+
+## Baseline setup
 
 1. Flash your SD card (assuming OS X):
     1. Get [Ubuntu MATE 15.10.1](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file
@@ -38,7 +40,7 @@
 1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
 1. Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk/blob/master/first-boot.md
 
-# Optional: WLAN
+## Optional: WLAN
 
 1. Check the interface name with `$ ifconfig`, e.g. `wlan0`
 1. Append to `/etc/network/interfaces`:
@@ -57,7 +59,7 @@
 
 1. Reboot
 
-# Preparing the image
+## Preparing the image
 
 1. Disable SSH access (because the default credentials aren't very secure): `$ sudo systemctl disable ssh.service`
 1. TODO: Dump image
