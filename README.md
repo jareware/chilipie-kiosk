@@ -1,6 +1,6 @@
 # chilipie-kiosk
 
-**Raspberry Pi 2** image for booting directly into **full-screen Chrome**. Main features:
+**Raspberry Pi 2** image for booting directly into **full-screen Chrome**. Perfect for dashboards and build monitors. Main features:
 
 * **Boots directly to full-screen Chrome** - with all the features of a modern browser
 * **No automatic updates** - no surprises due to Chrome (or other packages) suddenly updating

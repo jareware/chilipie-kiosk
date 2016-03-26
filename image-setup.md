@@ -17,13 +17,13 @@
 1. Disable MATE's default desktop with `$ sudo graphical disable` (though later nodm will boot directly to matchbox anyway)
 1. [Re-size the SD card file system](https://ubuntu-mate.org/raspberry-pi/):
     1. `$ sudo fdisk /dev/mmcblk0`
-    1. Delete the second partition (d, 2), then re-create it using the defaults (n, p, 2, enter, enter), then write and exit (w)
+    1. Delete the second partition (d, 2), then re-create it with slightly more free space (n, p, 2, enter, +4500M, enter), then write and exit (w)
     1. Reboot
     1. `$ sudo resize2fs /dev/mmcblk0p2`
     1. Reboot
 1. Clean up MATE's desktop cruft with `$ rm -rf ~/*`
 1. Install some packages we'll need:
-    1. `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter chromium-browser mailutils nitrogen jq`
+    1. `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser=45.0.2454.101-0ubuntu1.1201 chromium-codecs-ffmpeg=45.0.2454.101-0ubuntu1.1201`
     1. When mailutils prompts about its setup, "local only" is fine
 1. Make sure [automatic software updates are disabled](http://ask.xmodulo.com/disable-automatic-updates-ubuntu.html), in `/etc/apt/apt.conf.d/10periodic`:
 
@@ -74,5 +74,5 @@
 1. Dump the image to disk (assuming OS X):
     1. `$ diskutil list` to check correct device
     1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-    1. `$ sudo dd bs=1m if=/dev/disk2 of=chilipie-kiosk-TAG.img`
+    1. `$ sudo dd bs=1m count=5120 if=/dev/disk2 of=chilipie-kiosk-TAG.img` (only dump the relevant first 5 GB)
     1. `$ zip chilipie-kiosk-TAG.zip chilipie-kiosk-TAG.img`
