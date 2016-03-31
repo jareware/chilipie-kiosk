@@ -10,6 +10,10 @@ Press `F11` to exit the full screen mode, and `Ctrl + L` to focus the location b
 
 Chromium is configured to remember the URL where you left off (and all logins etc), so this might be all the configuration you need to do!
 
+## What to show
+
+Whatever, the Internet is your oyster! If you need simple auto-refresh, or timed cycling through several URL's, [`sideshow`](https://github.com/mieky/sideshow) is a great option.
+
 ## Getting a terminal
 
 You can get to a virtual terminal by pressing e.g. `Ctrl + Alt + F5`, and logging in with `pi:raspberry`. Use `Ctrl + Alt + F8` to switch back to the window manager.
