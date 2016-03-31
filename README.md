@@ -32,7 +32,7 @@ Optional extras:
 
 Preparing the image is easy. Assuming you're on OS X:
 
-1. `$ wget TODO`
+1. `$ wget https://github.com/futurice/chilipie-kiosk/releases/download/v1.0/chilipie-kiosk-v1.0.img.zip`
 1. `$ unzip chilipie-kiosk-v1.0.img.zip`
 1. Insert your microSD card
 1. `$ diskutil list` to check the correct device
