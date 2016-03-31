@@ -9,5 +9,11 @@ if [ -f .config/chromium/Default/Preferences ]; then
     mv .config/chromium/Default/Preferences{-clean,}
 fi
 
+# Remove notes of previous sessions, if any
+find .config/chromium/ -name "Last *" | xargs rm
+
 # http://peter.sh/experiments/chromium-command-line-switches/
 chromium-browser --start-fullscreen
+
+# If you need to run Chromium manually for whatever reason:
+# $ DISPLAY=:0.0 chromium-browser &
