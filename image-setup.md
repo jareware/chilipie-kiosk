@@ -74,5 +74,6 @@
 1. Dump the image to disk (assuming OS X):
     1. `$ diskutil list` to check correct device
     1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-    1. `$ sudo dd bs=1m count=5120 if=/dev/disk2 of=chilipie-kiosk-TAG.img` (only dump the relevant first 5 GB)
-    1. `$ zip chilipie-kiosk-TAG.zip chilipie-kiosk-TAG.img`
+    1. `$ sudo dd bs=1m count=5120 if=/dev/disk2 of=chilipie-kiosk-$TAG.img` (only dump the relevant first 5 GB)
+    1. `$ openssl sha1 chilipie-kiosk-$TAG.img` and include hash in release notes
+    1. `$ zip chilipie-kiosk-$TAG.zip chilipie-kiosk-$TAG.img`
