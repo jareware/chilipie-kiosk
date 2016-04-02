@@ -26,7 +26,6 @@ Optional extras:
 
 * Case for the Pi ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/52391/fcrhq/Raspberry-Pi-muovikotelo-Raspberry-Pi-B-Pi-2-tietokoneille-l)) - if you're worried about looks and/or gathering dust
 * USB WiFi-dongle ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/41271/dqnbc/Asus-USB-N10-Nano-WiFi-adapteri)) - if you can't get ethernet, which will usually be more reliable
-* Big Red Button ([Dream Cheeky](http://dreamcheeky.com/big-red-button)) - if you want a simple way to interact with the kiosk
 
 ## Software
 
