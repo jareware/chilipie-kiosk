@@ -15,12 +15,6 @@
 1. At this point you can already SSH onto the Pi and do the rest of the setup remotely
 1. `$ sudo visudo` and add `pi ALL=(ALL) NOPASSWD: ALL` to allow sudo without password prompt
 1. Disable MATE's default desktop with `$ sudo graphical disable` (though later nodm will boot directly to matchbox anyway)
-1. [Re-size the SD card file system](https://ubuntu-mate.org/raspberry-pi/):
-    1. `$ sudo fdisk /dev/mmcblk0`
-    1. Delete the second partition (d, 2), then re-create it with slightly more free space (n, p, 2, enter, +4500M, enter), then write and exit (w)
-    1. Reboot
-    1. `$ sudo resize2fs /dev/mmcblk0p2`
-    1. Reboot
 1. Clean up MATE's desktop cruft with `$ rm -rf ~/*`
 1. Install some packages we'll need:
     1. `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser=45.0.2454.101-0ubuntu1.1201 chromium-codecs-ffmpeg=45.0.2454.101-0ubuntu1.1201`
