@@ -18,6 +18,14 @@ Whatever, the Internet is your oyster! If you need simple auto-refresh, or timed
 
 You can get to a virtual terminal by pressing e.g. `Ctrl + Alt + F5`, and logging in with `pi:raspberry`. Use `Ctrl + Alt + F8` to switch back to the window manager.
 
+## Enabling WiFi
+
+Set the SSID and password of the network you're connecting to, with:
+
+    $ sudo vim ~/wlan.conf
+
+Reboot to make sure your Pi joins the network automatically.
+
 ## Enabling SSH
 
 The default credentials of `pi:raspberry` aren't terribly secure, so remote access is disabled by default. To enable SSH until next reboot:
