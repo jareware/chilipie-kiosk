@@ -30,6 +30,7 @@
 
         NODM_ENABLED=true
         NODM_USER=pi
+        NODM_FIRST_VT=8
 
 1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
 1. Put in the example crontab with `$ crontab -e`:
