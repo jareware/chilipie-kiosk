@@ -1,6 +1,6 @@
 # chilipie-kiosk
 
-**Raspberry Pi 2** image for booting directly into **full-screen Chrome**. Perfect for dashboards and build monitors. Main features:
+**Raspberry Pi** image for booting directly into **full-screen Chrome**. Perfect for dashboards and build monitors. Main features:
 
 * **Boots directly to full-screen Chrome** - with all the features of a modern browser
 * **No automatic updates** - no surprises due to Chrome (or other packages) suddenly updating
@@ -15,7 +15,7 @@
 
 Not all hardware works perfectly with the Pi, so you'll want to do some digging. The product links are a configuration that's known to work, though:
 
-* Raspberry Pi 2 ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/4657/fjxtn/Raspberry-Pi-2-model-B-yhden-piirilevyn-tietokone))
+* Raspberry Pi 2 or 3 ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/4657/fjxtn/Raspberry-Pi-2-model-B-yhden-piirilevyn-tietokone))
 * 8+ GB microSD card ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/6501/dcmkv/Transcend-8GB-microSDHC-muistikortti-Class-10))
 * Micro-USB power source (most people will have these laying around)
 * Display cable, either
@@ -31,12 +31,12 @@ Optional extras:
 
 Preparing the image is easy. Assuming you're on OS X:
 
-1. `$ wget https://github.com/futurice/chilipie-kiosk/releases/download/v1.0/chilipie-kiosk-v1.0.img.zip`
-1. `$ unzip chilipie-kiosk-v1.0.img.zip`
+1. `$ wget https://github.com/futurice/chilipie-kiosk/releases/download/v1.1/chilipie-kiosk-v1.1.img.zip`
+1. `$ unzip chilipie-kiosk-v1.1.img.zip`
 1. Insert your microSD card
 1. `$ diskutil list` to check the correct device
 1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.0.img of=/dev/disk2` to flash the card
+1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.1.img of=/dev/disk2` to flash the card
 1. Grab a coffee, this will take a while (e.g. 60 minutes on a MBP and a Class 10 card)
 1. `$ diskutil unmountDisk /dev/disk2` to safely eject the card
 1. Insert the microSD card to your Pi and power it up!
