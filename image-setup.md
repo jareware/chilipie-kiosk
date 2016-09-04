@@ -34,6 +34,18 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
         NODM_USER=pi
         NODM_FIRST_VT=8
 
+1. In `/usr/share/plymouth/themes/ubuntu-mate-text/ubuntu-mate-text.plymouth`, set:
+
+        [ubuntu-text]
+        title=chilipie-kiosk
+        black=0x000000
+
+1. In `/usr/share/plymouth/themes/ubuntu-mate-logo/ubuntu-mate-logo.script`, set:
+
+        Window.SetBackgroundTopColor (0, 0, 0);
+        Window.SetBackgroundBottomColor (0, 0, 0);
+
+1. Replace the Plymouth theme logos with `$ cd /usr/share/plymouth/themes/ubuntu-mate-logo && rm ubuntu-mate-logo{,16}.png && ln -s /home/pi/background.png ubuntu-mate-logo.png && ln -s /home/pi/background.png ubuntu-mate-logo16.png`
 1. Check that the version in `.chilipie-kiosk-version` matches `$TAG`, and it's on GitHub
 1. Get default scripts with `$ wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
 1. Put in the example crontab with `$ crontab -e`:
