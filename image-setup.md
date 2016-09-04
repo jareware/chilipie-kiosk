@@ -5,10 +5,10 @@
 Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
 
 1. Flash your SD card (assuming OS X):
-    1. Get [Ubuntu MATE 15.10.1](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file
+    1. Get [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file
     1. `$ diskutil list` to check correct device
     1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-    1. `$ sudo dd bs=1m if=ubuntu-mate-15.10.3-desktop-armhf-raspberry-pi-2.img of=/dev/rdisk2` (will take a while)
+    1. `$ sudo dd bs=1m if=ubuntu-mate-16.04-desktop-armhf-raspberry-pi.img of=/dev/rdisk2` (will take a while)
 1. Boot your Raspberry Pi using the SD card (the setup should be done on a Pi 3, but the resulting image will work on Pi 2 as well)
 1. Answer basic questions (timezone, keyboard layout, default user, etc)
     1. Set hostname to `chilipie-kiosk`
@@ -73,6 +73,6 @@ Assuming OS X:
 
 1. `$ diskutil list` to check correct device
 1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-1. `$ sudo dd bs=1m count=3750 if=/dev/disk2 of=chilipie-kiosk-$TAG.img` (only dump the relevant first ~3.7 GB, matching the original `ubuntu-mate` image size)
+1. `$ sudo dd bs=1m count=7680 if=/dev/disk2 of=chilipie-kiosk-$TAG.img` (only dump the relevant first ~8 GB, matching the original `ubuntu-mate` image size)
 1. `$ openssl sha1 chilipie-kiosk-$TAG.img` and include hash in release notes
 1. `$ zip chilipie-kiosk-$TAG.img.zip chilipie-kiosk-$TAG.img`
