@@ -14,19 +14,20 @@
 
 ## Hardware
 
-Not all hardware works perfectly with the Pi, so you'll want to do some digging. The product links are a configuration that's known to work, though:
+Not all hardware works perfectly with the Pi, so to save you some digging, here's a (non-exhaustive!) list of configurations *known to work*:
 
-* Raspberry Pi 2 or 3 ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/4657/fjxtn/Raspberry-Pi-2-model-B-yhden-piirilevyn-tietokone))
-* 8+ GB microSD card ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/6501/dcmkv/Transcend-8GB-microSDHC-muistikortti-Class-10))
-* Micro-USB power source (most people will have these laying around)
-* Display cable, either
-    * Regular HDMI for televisions, or
-    * HDMI-to-DVI for computer displays
-
-Optional extras:
-
-* Case for the Pi ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/52391/fcrhq/Raspberry-Pi-muovikotelo-Raspberry-Pi-B-Pi-2-tietokoneille-l)) - if you're worried about looks and/or gathering dust
-* USB WiFi-dongle ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/41271/dqnbc/Asus-USB-N10-Nano-WiFi-adapteri)) - if you can't get ethernet, which will usually be more reliable
+* Recommended kits (let us know of others!)
+    * Raspberry Pi 3 Starter Kit ([amazon.de](https://www.amazon.de/Vilros-Raspberry-Pi-Complete-Kit---Enthalt/dp/B01DC6MKAQ), [verkkokauppa.com](https://www.verkkokauppa.com/fi/product/38619/gxgmc/Raspberry-Pi-3-model-B-aloituspakkaus))
+* Components bought separately (let us know of others!)
+    * Raspberry Pi 2 or 3 ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/4657/fjxtn/Raspberry-Pi-2-model-B-yhden-piirilevyn-tietokone))
+    * [Compatible](http://elinux.org/RPi_SD_cards) 8+ GB microSD card ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/6501/dcmkv/Transcend-8GB-microSDHC-muistikortti-Class-10))
+    * Micro-USB power source (most people will have these laying around)
+    * Display cable, either
+        * Regular HDMI for televisions, or
+        * HDMI-to-DVI for computer displays
+    * Optional extras
+        * Case for the Pi ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/52391/fcrhq/Raspberry-Pi-muovikotelo-Raspberry-Pi-B-Pi-2-tietokoneille-l)) - if you're worried about looks and/or gathering dust
+        * USB WiFi-dongle ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/41271/dqnbc/Asus-USB-N10-Nano-WiFi-adapteri)) - if you can't get ethernet, which will usually be more reliable
 
 ## Software
 
