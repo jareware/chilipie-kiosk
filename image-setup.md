@@ -19,8 +19,10 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
 1. Disable MATE's default desktop with `$ sudo graphical disable` (though later nodm will boot directly to matchbox anyway)
 1. Clean up MATE's desktop cruft with `$ rm -rf ~/*`
 1. Remove some packages we don't need: `$ sudo apt-get purge -y $(dpkg --get-selections 'sonic*' 'thunderbird*' 'libreoffice*' 'minecraft*' 'scratch*' 'shotwell*' 'simple-scan*' 'hexchat*' 'pidgin*' 'transmission*' 'youtube-dl*' 'atril*' 'idle*' 'brasero*' 'omxplayer*' 'rhythmbox*' 'supercollider*' 'vlc*' | cut -f 1 | tr '\n' ' ')`
-1. Install some packages we'll need: `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser=45.0.2454.101-0ubuntu1.1201 chromium-codecs-ffmpeg=45.0.2454.101-0ubuntu1.1201`
+1. Install some packages we'll need: `$ sudo apt-get update && sudo apt-get install -y vim nodm matchbox-window-manager unclutter mailutils nitrogen jq`
     * When mailutils prompts about its setup, "local only" is fine (we install mailutils so that you can check `mail` for cronjob output)
+1. For the time being, the Chromium from Ubuntu repo's [keeps segfaulting](https://ubuntu-mate.community/t/chromium-crashes-when-starting-segfaults/4578/27), so use the [alternate installation method](https://ubuntu-mate.community/t/tutorial-install-working-chromium-50/6762) instead of installing the `chromium-browser` package directly
+1. Remove unnecessary packages with `$ sudo apt-get autoremove -y && sudo apt-get clean`
 1. Make sure [automatic software updates are disabled](http://ask.xmodulo.com/disable-automatic-updates-ubuntu.html), in `/etc/apt/apt.conf.d/10periodic`:
 
         APT::Periodic::Unattended-Upgrade "0";
@@ -76,6 +78,7 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
 
 1. Disable SSH access (because the default credentials aren't very secure): `$ sudo systemctl disable ssh.service`
 1. Reboot (should land you in Chromium)
+1. Tell Chromium "Don't ask again" about being the default browser
 1. Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk/blob/$TAG/first-boot.md
 1. Unpower the Pi
 
