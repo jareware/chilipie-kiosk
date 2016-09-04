@@ -57,6 +57,7 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
         # 0  7 * * 1-5 ~/display-on.sh  # turn display on weekdays at 7 AM
         # 0 19 * * 1-5 ~/display-off.sh # turn display off weekdays at 7 PM
 
+1. Disable overscan for HDMI output (as this is rarely needed on modern displays) by uncommenting `disable_overscan=1` in `/boot/config.txt`
 1. Set up WiFi (for Raspberry Pi 3 only):
     1. Check the interface name with `$ ifconfig`, e.g. `wlan0`
     1. Append to `/etc/network/interfaces`:
