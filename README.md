@@ -10,6 +10,7 @@
 * **HDMI output control** - ready-made scripts for e.g. turning off the display outside of office hours
 * **Cursor hiding** - if you leave a mouse plugged in, the cursor is hidden after a brief period of inactivity
 * **Based on a recent Ubuntu** - if you want to add your own hacks, all the expected packages are one `apt-get` away
+* **Batteries included** - the most common how-to's have been collected to the [first-boot document](first-boot.md)
 
 ## Hardware
 

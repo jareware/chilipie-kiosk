@@ -43,3 +43,17 @@ Use `ifconfig` to figure out your IP address, and `ssh` in.
 The scripts `~/display-on.sh` and `~/display-off.sh` control the HDMI output of the Raspberry Pi.
 
 There's a sample configuration in the crontab for turning the display off outside of office hours - use `crontab -e` to uncomment it.
+
+## Adjusting the output resolution
+
+If the display auto-detection fails and chooses a funky default resolution for you, [there's a few things you can do](https://github.com/futurice/chilipie-kiosk/issues/13) to try and fix that.
+
+## Changing locale settings
+
+To change the keyboard layout:
+
+    $ sudo dpkg-reconfigure console-data
+
+To change the timezone:
+
+    $ sudo dpkg-reconfigure tzdata
