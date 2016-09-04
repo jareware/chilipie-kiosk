@@ -71,8 +71,12 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
     1. In `/etc/wpa_supplicant/wpa_supplicant.conf`:
 
         network={
+            # Your network name goes here:
             ssid="networkname"
-            psk="secretpassword"
+            # EITHER: uncomment this for a password-protected WLAN:
+            #psk="secretpassword"
+            # OR: uncomment this for an unprotected WLAN:
+            #key_mgmt=NONE
         }
 
     1. Symlink the file, for convenience: `$ ln -s /etc/wpa_supplicant/wpa_supplicant.conf wlan.conf`
