@@ -8,8 +8,8 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.1`.
     1. Get [Ubuntu MATE 15.10.1](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file
     1. `$ diskutil list` to check correct device
     1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-    1. `$ sudo dd bs=1m if=ubuntu-mate-15.10.3-desktop-armhf-raspberry-pi-2.img of=/dev/disk2` (may take up to an hour)
-1. Boot your Raspberry Pi using the SD card
+    1. `$ sudo dd bs=1m if=ubuntu-mate-15.10.3-desktop-armhf-raspberry-pi-2.img of=/dev/rdisk2` (will take a while)
+1. Boot your Raspberry Pi using the SD card (the setup should be done on a Pi 3, but the resulting image will work on Pi 2 as well)
 1. Answer basic questions (timezone, keyboard layout, default user, etc)
     1. Set hostname to `chilipie-kiosk`
     1. Set username/password to `pi:raspberry` (or whatever you want)

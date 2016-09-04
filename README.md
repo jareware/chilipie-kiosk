@@ -36,8 +36,8 @@ Preparing the image is easy. Assuming you're on OS X:
 1. Insert your microSD card
 1. `$ diskutil list` to check the correct device
 1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.1.img of=/dev/disk2` to flash the card
-1. Grab a coffee, this will take a while (e.g. 60 minutes on a MBP and a Class 10 card)
+1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.1.img of=/dev/rdisk2` to flash the card
+1. Grab a coffee, this will take a while
 1. `$ diskutil unmountDisk /dev/disk2` to safely eject the card
 1. Insert the microSD card to your Pi and power it up!
 
