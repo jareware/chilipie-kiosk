@@ -44,3 +44,8 @@ Preparing the image is easy. Assuming you're on OS X:
 1. Insert the microSD card to your Pi and power it up!
 
 The first boot should land you [here](first-boot.md).
+
+## Common issues
+
+* **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` won't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
+* **I see a "rainbow square" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough voltage from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
