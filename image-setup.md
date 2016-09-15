@@ -2,7 +2,7 @@
 
 ## Baseline setup
 
-Replace `$TAG` with whatever version is being built, e.g. `v1.2`.
+Replace `$TAG` with whatever version is being built, e.g. `v1.2.1`.
 
 1. Flash your SD card (assuming OS X):
     1. Get [Ubuntu MATE 16.04](https://ubuntu-mate.org/raspberry-pi/) and decompress into an `.img` file

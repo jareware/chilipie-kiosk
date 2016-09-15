@@ -33,12 +33,12 @@ Not all hardware works perfectly with the Pi, so to save you some digging, here'
 
 Preparing the image is easy. Assuming you're on OS X:
 
-1. `$ wget https://github.com/futurice/chilipie-kiosk/releases/download/v1.2/chilipie-kiosk-v1.2.img.zip`
-1. `$ unzip chilipie-kiosk-v1.2.img.zip`
+1. `$ wget https://github.com/futurice/chilipie-kiosk/releases/download/v1.2.1/chilipie-kiosk-v1.2.1.img.zip`
+1. `$ unzip chilipie-kiosk-v1.2.1.img.zip`
 1. Insert your microSD card
 1. `$ diskutil list` to check the correct device
 1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.2.img of=/dev/rdisk2` to flash the card
+1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.2.1.img of=/dev/rdisk2` to flash the card
 1. Grab a coffee, this will take a while
 1. `$ diskutil unmountDisk /dev/disk2` to safely eject the card
 1. Insert the microSD card to your Pi and power it up!
