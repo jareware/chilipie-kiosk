@@ -62,14 +62,17 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2.1`.
     1. Check the interface name with `$ ifconfig`, e.g. `wlan0`
     1. Append to `/etc/network/interfaces`:
 
+        ```
         # Internal WiFi adapter
         allow-hotplug wlan0
         iface wlan0 inet dhcp
         wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
         iface default inet dhcp
+        ```
 
     1. In `/etc/wpa_supplicant/wpa_supplicant.conf`:
 
+        ```
         network={
             # Your network name goes here:
             ssid="networkname"
@@ -78,6 +81,7 @@ Replace `$TAG` with whatever version is being built, e.g. `v1.2.1`.
             # OR: uncomment this for an unprotected WLAN:
             #key_mgmt=NONE
         }
+        ```
 
     1. Symlink the file, for convenience: `$ ln -s /etc/wpa_supplicant/wpa_supplicant.conf wlan.conf`
 
