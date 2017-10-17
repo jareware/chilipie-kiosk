@@ -98,5 +98,5 @@ Assuming OS X:
 1. `$ diskutil list` to check correct device
 1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
 1. `$ sudo dd bs=1m count=7680 if=/dev/disk2 of=chilipie-kiosk-$TAG.img` (only dump the relevant first ~8 GB, matching the original `ubuntu-mate` image size; takes around 15 minutes)
-1. `$ openssl sha1 chilipie-kiosk-$TAG.img` and include hash in release notes
-1. `$ zip chilipie-kiosk-$TAG.img.zip chilipie-kiosk-$TAG.img`
+1. `$ COPYFILE_DISABLE=1 tar -zcvf chilipie-kiosk-$TAG.img.tar.gz chilipie-kiosk-$TAG.img`
+1. `$ openssl sha1 chilipie-kiosk-$TAG.img*` and include hash in release notes
