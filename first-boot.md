@@ -26,6 +26,8 @@ Set the SSID and password of the network you're connecting to, with:
 
 Reboot to make sure your Pi joins the network automatically.
 
+    $ sudo reboot
+
 ## Enabling SSH
 
 The default credentials of `pi:raspberry` aren't terribly secure, so remote access is disabled by default. To enable SSH until next reboot:
