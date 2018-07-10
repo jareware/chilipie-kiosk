@@ -14,6 +14,8 @@
 
 ## Hardware
 
+**IMPORTANT:** The latest [Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) isn't yet supported. This should be fixed soon.
+
 Not all hardware works perfectly with the Pi, so to save you some digging, here's a (non-exhaustive!) list of configurations *known to work*:
 
 * Recommended kits (let us know of others!)
