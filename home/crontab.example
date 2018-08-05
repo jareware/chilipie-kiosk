@@ -1,0 +1,9 @@
+# m h  dom mon dow   command
+
+# 0  7 * * 1-5 ~/display-on.sh  # turn display on weekdays at 7 AM
+# 0 19 * * 1-5 ~/display-off.sh # turn display off weekdays at 7 PM
+
+0 3 * * * sudo reboot           # reboot the pi every night at 3 AM
+
+# * * * * * DISPLAY=:0.0 xdotool key ctrl+R
+* * * * * DISPLAY=:0.0 xdotool key ctrl+Tab
