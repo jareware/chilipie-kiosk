@@ -46,7 +46,7 @@ Replace `$TAG` with whatever version is being built, e.g. `v2.0.0`.
     1.  `sudo reboot`
     1.  `sudo resize2fs /dev/mmcblk0p2`
     1.  `df -h`
-1.  Install some packages we'll need: `sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash`
+1.  Install some packages we'll need: `sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool`
     -   We install mailutils so that you can check `mail` for cronjob output
 1.  Get default scripts with `wget "https://github.com/futurice/chilipie-kiosk/archive/master.zip" && unzip master.zip && cp -v $(find chilipie-kiosk-master/home/ -type f) . && rm -rf chilipie-kiosk-master/ master.zip`
 1.  [Customize Plymouth boot theme graphics](https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/) with `sudo rm /usr/share/plymouth/themes/pix/splash.png && sudo ln -s /home/pi/background.png /usr/share/plymouth/themes/pix/splash.png`
