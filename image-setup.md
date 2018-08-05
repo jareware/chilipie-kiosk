@@ -4,7 +4,9 @@
 
 Replace `$TAG` with whatever version is being built, e.g. `v2.0.0`.
 
-1.  Check that the version in `.chilipie-kiosk-version` matches `$TAG`, and it's on GitHub
+1.  Check that the version in `.chilipie-kiosk-version` matches `$TAG`
+1.  Run `./md-to-html.sh`
+1.  Check that all changes have been pushed to GitHub
 1.  Get Raspbian Lite (`2018-06-27-raspbian-stretch-lite.zip`)
 1.  Flash it onto an SD card (use [Etcher](https://etcher.io) or `dd`)
 1.  Re-mount the card
@@ -54,7 +56,7 @@ Replace `$TAG` with whatever version is being built, e.g. `v2.0.0`.
 1.  Disable SSH access again (because the default credentials aren't very secure) with `sudo raspi-config`
 1.  Reboot (should land you in Chromium)
 1.  Tell Chromium we don't want to sign in
-1.  Configure Chromium to start from "where you left off", and navigate to https://github.com/futurice/chilipie-kiosk/blob/$TAG/first-boot.md
+1.  Configure Chromium to start from "where you left off", and navigate to `file:///home/pi/first-boot.html`
 1.  Gracefully shut down the Pi
 
 ## Dumping the image
