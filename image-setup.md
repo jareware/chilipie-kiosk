@@ -2,9 +2,8 @@
 
 ## Baseline setup
 
-Replace `$TAG` with whatever version is being built, e.g. `v2.0.0`.
-
-1.  Check that the version in `.chilipie-kiosk-version` matches `$TAG`
+1.  Set the version we're building, e.g. `export TAG=v2.0.0-rc2`
+1.  Update version file with `echo -e "$TAG\n\nhttps://github.com/futurice/chilipie-kiosk" > home/.chilipie-kiosk-version`
 1.  Run `./md-to-html.sh`
 1.  Check that all changes have been pushed to GitHub
 1.  Get Raspbian Lite (`2018-06-27-raspbian-stretch-lite.zip`)
