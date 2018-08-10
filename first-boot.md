@@ -1,61 +1,43 @@
 # Welcome to chilipie-kiosk
 
-**Looks like this might be your first boot!**
+**Looks like this is your first boot!**
 
-This document lists some things you can do to customize your kiosk. You'll want to plug in a keyboard at this point.
+This document lists some things you can do to customize your kiosk. You'll need to plug in a keyboard for this initial setup, but after that, it's perfectly fine to leave the kiosk running without any peripherals plugged in.
 
 ## Setting the URL
 
 Press `F11` to exit the full screen mode, and `Ctrl + L` to focus the location bar. Navigate away! Once done, press `F11` again to re-enter full screen mode.
 
-Chromium is configured to remember the URL where you left off (and all logins etc), so this might be all the configuration you need to do!
+Chromium is configured to remember the URL where you left off (and all logins, etc), so this might be all the configuration you need to do!
 
-## What to show
+## Getting to a terminal
 
-Whatever, the Internet is your oyster! If you need simple auto-refresh, or timed cycling through several URL's, [`sideshow`](https://github.com/mieky/sideshow) is a great option.
+You can get to a virtual terminal by pressing `Ctrl + Alt + F2`, and logging in with username `pi` and password `raspberry`. Use `Ctrl + Alt + F1` to switch back to Chromium.
 
-## Getting a terminal
+## System configuration
 
-You can get to a virtual terminal by pressing e.g. `Ctrl + Alt + F5`, and logging in with `pi:raspberry`. Use `Ctrl + Alt + F8` to switch back to the window manager.
+Use `sudo raspi-config` in the terminal to do things like:
 
-## Enabling WiFi
+* Join a WiFi network
+* Change the system timezone
+* Change your keyboard layout
+* Enable SSH access (it's disabled by default for security reasons)
 
-Set the SSID and password of the network you're connecting to, with:
+## Automating things
 
-    $ sudo vim ~/wlan.conf
+There's a few commonly useful snippets already on the crontab, such as:
 
-Reboot to make sure your Pi joins the network automatically.
+* **Rebooting the Pi every night at 3 AM**. If you run resource intensive pages on your dashboard, the Pi can eventually start to slow down. A nightly reboot keeps it rested and refreshed! This is enabled by default.
+* **Turning the display off for the night**. This helps save energy when there's no-one there to look at your dashboard. Sometimes also useful for reasons of vanity, when bright displays in the middle of a dark office would look ridiculous. Do make sure your display/television comes back on, however: especially older TV's sometimes won't know to automatically turn back on when the HDMI signal comes back on. In those cases, you may have luck with [CEC signals](https://timleland.com/raspberry-pi-turn-tv-onoff-cec/), but also you may not. If nothing else works, you can always just [blank the display](https://askubuntu.com/a/7299).
+* **Automatically reloading the active page every hour**. If the page you're displaying doesn't automatically update itself, this is effectively the same as hitting `Ctrl + R` every hour. Very crude. Very effective.
+* **Cycling between open tabs every 5 minutes**. Same as above, but for `Ctrl + Tab`. Note that if you use both at the same time, you can combine them, to send the reload command *just before* sending the tab cycle command. This causes the pages to reload while they're in the background, so the user never sees it happening.
 
-    $ sudo reboot
+Use `crontab -e` to check these out, enable the ones you want, or customize them to your heart's content.
 
-## Enabling SSH
+## Customizing Chromium
 
-The default credentials of `pi:raspberry` aren't terribly secure, so remote access is disabled by default. To enable SSH until next reboot:
+Because you're running a fully-featured Chromium, you can customize it further by [installing browser extensions](https://chrome.google.com/webstore/category/extensions). For instance, [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) can be useful for injecting custom JS or CSS to a page you're displaying.
 
-    $ sudo systemctl start ssh.service
+## Adjusting your resolution
 
-Or, to enable it permanently:
-
-    $ sudo systemctl enable ssh.service
-
-Use `ifconfig` to figure out your IP address, and `ssh` in.
-
-## Controlling the display
-
-The scripts `~/display-on.sh` and `~/display-off.sh` control the HDMI output of the Raspberry Pi.
-
-There's a sample configuration in the crontab for turning the display off outside of office hours - use `crontab -e` to uncomment it.
-
-## Adjusting the output resolution
-
-If the display auto-detection fails and chooses a funky default resolution for you, [there's a few things you can do](https://github.com/futurice/chilipie-kiosk/issues/13) to try and fix that.
-
-## Changing locale settings
-
-To change the keyboard layout:
-
-    $ sudo dpkg-reconfigure console-data
-
-To change the timezone:
-
-    $ sudo dpkg-reconfigure tzdata
+If the display auto-detection fails and chooses a funky default resolution for you, [there's a few things you can do](https://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html) to try and fix that.
