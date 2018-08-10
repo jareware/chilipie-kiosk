@@ -14,8 +14,9 @@
 # Example: Turn display on weekdays at 7 AM
 # 0 7 * * 1-5 ~/display-on.sh
 
-# Example: Turn display off weekdays at 7 PM
+# Example: Turn display off weekdays at 7 PM (and after the nightly reboot)
 # 0 19 * * 1-5 ~/display-off.sh
+# 10 3 * * 1-5 ~/display-off.sh
 
 # Example: Reload webpage every hour
 # 0 * * * * DISPLAY=:0.0 xdotool key ctrl+R
