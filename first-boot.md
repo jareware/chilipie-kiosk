@@ -41,3 +41,9 @@ Because you're running a fully-featured Chromium, you can customize it further b
 ## Adjusting your resolution
 
 If the display auto-detection fails and chooses a funky default resolution for you, [there's a few things you can do](https://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html) to try and fix that.
+
+## Replacing the boot graphics
+
+The image that's displayed while the kiosk is starting can be changed by just replacing `background.png` in the home directory.
+
+To change the default chilipie-kiosk boot graphics to a nice doge, for example, try `wget -O background.png https://bit.ly/2w1P4Il`.
