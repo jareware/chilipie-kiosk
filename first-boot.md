@@ -44,6 +44,10 @@ If the display auto-detection fails and chooses a funky default resolution for y
 
 ## Replacing the boot graphics
 
-The image that's displayed while the kiosk is starting can be changed by just replacing `background.png` in the home directory.
+The image that's displayed while the kiosk is starting can be changed by just replacing `~/background.png`.
 
 To change the default chilipie-kiosk boot graphics to a nice doge, for example, try `wget -O background.png https://bit.ly/2w1P4Il`.
+
+## Increasing boot show delay
+
+By default, the browser window is hidden for a few seconds after boot, to give the page time to load. You can increase (or decrease) this delay in `~/.xsession`.
