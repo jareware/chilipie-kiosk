@@ -1,53 +1,42 @@
 # chilipie-kiosk
 
-**Raspberry Pi** image for booting directly into **full-screen Chrome**. Perfect for dashboards and build monitors. Main features:
+Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrome**, with built-in convenience features for unattended operation. Perfect for **dashboards and build monitors**.
+
+## Features
 
 * **Boots directly to full-screen Chrome** - with all the features of a modern browser
 * **No automatic updates** - no surprises due to Chrome (or other packages) suddenly updating
-* **Automatic crash-recovery** - accidentally unplugging your kiosk won't result in "Chrome did not shut down correctly :("
-* **Custom startup graphics** - displays [customizable graphics](home/background.png) while the browser is starting up
+* **Automatic crash-recovery** - accidental unpowering won't result in "Chrome did not shut down correctly :("
+* **Custom startup graphics** - displays [customizable graphics](home/background.png) instead of console messages during startup
 * **Lightweight window manager** - uses [Matchbox](https://www.yoctoproject.org/tools-resources/projects/matchbox) for minimal clutter and memory footprint
-* **HDMI output control** - ready-made scripts for e.g. turning off the display outside of office hours
+* **HDMI output control** - ready-made scripts for [turning off the display](home/crontab.example) outside of office hours, for example
 * **Cursor hiding** - if you leave a mouse plugged in, the cursor is hidden after a brief period of inactivity
-* **Based on a recent Ubuntu** - if you want to add your own hacks, all the expected packages are one `apt-get` away
-* **Batteries included** - the most common how-to's have been collected to the [first-boot document](first-boot.md)
+* **Automatic reboots** - reboots the Pi nightly, when nobody's watching, to keep it running smoothly
+* **Based on a recent Debian** - if you want to add your own tweaks, all the expected packages are one `apt-get` away
+* **Batteries included** - the most common how-to's and ProTips have been collected to the [first-boot document](first-boot.md)
+
+## Getting started
+
+1. Check that you have [compatible hardware](#hardware).
+1. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
+1. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
+1. Insert the SD card to your Pi and power it up.
+1. You should land in the [first-boot document](first-boot.md), for further instructions & ideas.
 
 ## Hardware
 
-**IMPORTANT:** The latest [Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) isn't yet supported. This should be fixed soon.
+Works with [Raspberry Pi versions 1, 2 & 3](https://www.raspberrypi.org/products/). The 3 series is recommended, as it's the most powerful, and comes with built-in WiFi (though both [official](https://www.raspberrypi.org/products/raspberry-pi-usb-wifi-dongle/) and [off-the-shelf](https://elinux.org/RPi_USB_Wi-Fi_Adapters) USB WiFi dongles can work equally well).
 
-Not all hardware works perfectly with the Pi, so to save you some digging, here's a (non-exhaustive!) list of configurations *known to work*:
+Make sure you have a [compatible 4+ GB SD card](http://elinux.org/RPi_SD_cards). In general, any Class 10 card will work, as they're fast enough and of high enough quality.
 
-* Recommended kits (let us know of others!)
-    * Raspberry Pi 3 Starter Kit ([amazon.de](https://www.amazon.de/Vilros-Raspberry-Pi-Complete-Kit---Enthalt/dp/B01DC6MKAQ), [verkkokauppa.com](https://www.verkkokauppa.com/fi/product/38619/gxgmc/Raspberry-Pi-3-model-B-aloituspakkaus))
-* Components bought separately (let us know of others!)
-    * Raspberry Pi 2 or 3 ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/4657/fjxtn/Raspberry-Pi-2-model-B-yhden-piirilevyn-tietokone))
-    * [Compatible](http://elinux.org/RPi_SD_cards) 8+ GB microSD card ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/6501/dcmkv/Transcend-8GB-microSDHC-muistikortti-Class-10))
-    * Micro-USB power source (most people will have these laying around)
-    * Display cable, either
-        * Regular HDMI for televisions, or
-        * HDMI-to-DVI for computer displays
-    * Optional extras
-        * Case for the Pi ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/52391/fcrhq/Raspberry-Pi-muovikotelo-Raspberry-Pi-B-Pi-2-tietokoneille-l)) - if you're worried about looks and/or gathering dust
-        * USB WiFi-dongle ([verkkokauppa.com](https://www.verkkokauppa.com/fi/product/41271/dqnbc/Asus-USB-N10-Nano-WiFi-adapteri)) - if you can't get ethernet, which will usually be more reliable
-
-## Software
-
-Preparing the image is easy. Assuming you're on macOS:
-
-1. Download and decompress [the latest image](https://github.com/futurice/chilipie-kiosk/releases/download/v1.2.1-repack/chilipie-kiosk-v1.2.1.img.tar.gz)
-1. Insert your microSD card
-1. `$ diskutil list` to carefully check the correct device (/dev/disk2 is used as example below)
-1. `$ diskutil unmountDisk /dev/disk2` to prepare it for imaging
-1. `$ sudo dd bs=1m if=chilipie-kiosk-v1.2.1.img of=/dev/rdisk2` to flash the card (rdisk is faster raw access)
-1. Grab a coffee, this will take a while. On OSX, pressing Ctrl + t, will give you the amount of bytes transferred.
-1. `$ diskutil unmountDisk /dev/disk2` to safely eject the card
-1. Insert the microSD card to your Pi and power it up!
-
-The first boot should land you [here](first-boot.md).
+The Pi needs a [2.5 Amp power source](https://www.raspberrypi.org/documentation/hardware/raspberrypi/power/README.md). Most modern USB chargers you'll have laying around will work, but an older/cheaper one may not.
 
 ## Common issues
 
-* **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` won't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
-* **I see a "rainbow square" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough voltage from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
+* **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` wasn't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
+* **I see a "rainbow square" or "yellow lightning" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough amps from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
 * **The [display control scripts](home/display-on.sh) don't turn off the display device.** Normal PC displays will usually power down when you cut off the signal, but this is not the case for many TV's. Please check if your TV has an option in its settings for enabling this, as some do. If not, you can [try your luck with HDMI CEC signals](http://raspberrypi.stackexchange.com/questions/9142/commands-for-using-cec-client), but the TV implementations of the spec are notoriously spotty.
+
+## Acknowledgements
+
+This project is a grateful recipient of [Futurice Open Source sponsorship](http://futurice.com/blog/sponsoring-free-time-open-source-activities). Thank you. 🙇
