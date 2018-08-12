@@ -1,8 +1,10 @@
 #!/bin/bash
 
+export DISPLAY=:0.0
+
 # Start cursor at the top-left corner, as opposed to the default of dead-center
 # (so it doesn't accidentally trigger hover styles on elements on the page)
-DISPLAY=:0.0 xdotool mousemove 0 0
+xdotool mousemove 0 0
 
 # Set some useful X preferences
 xset s off # don't activate screensaver
@@ -29,6 +31,12 @@ find .config/chromium/ -name "Last *" | xargs rm
 # Start and detach Chromium
 # http://peter.sh/experiments/chromium-command-line-switches/
 chromium-browser --start-fullscreen --disable-infobars &
+
+# Hide Chromium while it's starting/loading the page
+wid=`xdotool search --sync --onlyvisible --class chromium`
+xdotool windowunmap $wid
+sleep 10 # give the web page time to load
+xdotool windowmap $wid
 
 # Finally, switch process to our window manager
 exec matchbox-window-manager -use_titlebar no
