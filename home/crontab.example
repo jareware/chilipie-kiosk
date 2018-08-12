@@ -1,3 +1,5 @@
+DISPLAY=:0.0
+
 # ┌───────────── minute (0 - 59)
 # │ ┌───────────── hour (0 - 23)
 # │ │ ┌───────────── day of month (1 - 31)
@@ -19,7 +21,7 @@
 # 10 3 * * 1-5 ~/display-off.sh
 
 # Example: Reload webpage every hour
-# 0 * * * * DISPLAY=:0.0 xdotool key ctrl+R
+# 0 * * * * xdotool key ctrl+R
 
 # Example: Cycle between open tabs every 5 minutes
-# */5 * * * * DISPLAY=:0.0 xdotool key ctrl+Tab
+# */5 * * * * xdotool key ctrl+Tab
