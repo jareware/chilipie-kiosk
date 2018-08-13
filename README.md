@@ -19,6 +19,7 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 
 1. Check that you have [compatible hardware](#hardware).
 1. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
+1. Decompress it.
 1. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
 1. Insert the SD card to your Pi and power it up.
 1. You should land in the [first-boot document](first-boot.md), for further instructions & ideas.

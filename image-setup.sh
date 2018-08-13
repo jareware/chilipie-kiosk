@@ -3,6 +3,7 @@
 MOUNTED_BOOT_VOLUME="boot" # i.e. under which name is the SD card mounted under /Volumes on macOS
 SD_SIZE_REAL=2500 # this is in MB
 SD_SIZE_SAFE=2800 # this is in MB
+SD_SIZE_ZERO=3200 # this is in MB
 PUBKEY="$(cat ~/.ssh/id_rsa.pub)"
 KEYBOARD="fi"
 TIMEZONE="Europe/Helsinki"
@@ -20,7 +21,7 @@ function scp {
   /usr/bin/scp -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@" "pi@$IP:/home/pi"
 }
 
-question "Enter version being built (e.g. \"1.2.3\")"
+question "Enter version (e.g. \"1.2.3\") being built:"
 read TAG
 
 working "Updating version file"
@@ -36,6 +37,24 @@ cp first-boot.md md-input
 ./node_modules/.bin/generate-md --layout github --input md-input/ --output md-output/
 ./node_modules/.bin/html-inline -i md-output/first-boot.html > home/first-boot.html
 rm -rf md-input md-output
+
+question "Mount the SD card (press enter when ready)"
+read
+
+working "Figuring out SD card device"
+diskutil list
+DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
+
+question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"/dev/disk2\"), press enter to continue"
+read
+
+working "Safely unmounting the card"
+diskutil unmountDisk "$DISK"
+
+working "Writing the card full of zeros (for security and compressibility reasons)"
+echo "This may take a long time"
+echo "You may be prompted for your password by sudo"
+sudo dd bs=1m count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK"
 
 question "Flash Raspbian Lite (2018-06-27-raspbian-stretch-lite.zip) with Etcher, then re-mount the card (press enter when ready)"
 read
@@ -53,21 +72,22 @@ working "Enabling SSH for first boot"
 # https://www.raspberrypi.org/documentation/remote-access/ssh/
 touch "/Volumes/$MOUNTED_BOOT_VOLUME/ssh"
 
-question "Safely unmount the card, boot the Pi from it, run \"sudo raspi-config\", and:"
-echo "* Under \"Boot Options\", select \"Console Autologin\""
-echo "(press enter when ready)"
-read
+working "Safely unmounting the card"
+diskutil unmountDisk "$DISK"
 
-question "Enter the IP address of the Pi (use \"ifconfig\" if in doubt)"
+question "Do initial Pi setup:"
+echo "* Eject the card"
+echo "* Boot the Pi from it"
+echo "* Log in with \"pi:raspberry\""
+echo "* Use \"ifconfig\" to check the IP address of the Pi"
+echo "Enter the IP address:"
 read IP
-SSH="ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null pi@$IP"
 
 working "Installing temporary SSH pubkey"
 echo -e "Password hint: \"raspberry\""
 ssh "mkdir .ssh && echo '$PUBKEY' > .ssh/authorized_keys"
 
 working "Figuring out partition start"
-enter='\\n'
 ssh "echo -e 'p\nq\n' | sudo fdisk /dev/mmcblk0 | grep /dev/mmcblk0p2 | tr -s ' ' | cut -d ' ' -f 2" > temp
 START="$(cat temp)"
 rm temp
@@ -81,6 +101,7 @@ ssh "echo -e 'd\n2\nn\np\n2\n$START\n+${SD_SIZE_REAL}M\ny\nw\n' | sudo fdisk /de
 working "Setting hostname"
 # We want to do this right before reboot, so we don't get a lot of unnecessary complaints about "sudo: unable to resolve host chilipie-kiosk" (https://askubuntu.com/a/59517)
 ssh "sudo hostnamectl set-hostname chilipie-kiosk"
+ssh "sudo sed -i 's/raspberrypi/chilipie-kiosk/g' /etc/hosts"
 
 working "Rebooting the Pi"
 ssh "sudo reboot"
@@ -90,6 +111,13 @@ read
 
 working "Finishing the root partition resize"
 ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
+
+working "Enabling auto-login to CLI"
+# From: https://github.com/RPi-Distro/raspi-config/blob/985548d7ca00cab11eccbb734b63750761c1f08a/raspi-config#L955
+SUDO_USER=pi
+ssh "sudo systemctl set-default multi-user.target"
+ssh "sudo sed /etc/systemd/system/autologin@.service -i -e \"s#^ExecStart=-/sbin/agetty --autologin [^[:space:]]*#ExecStart=-/sbin/agetty --autologin $SUDO_USER#\""
+ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
 
 working "Setting timezone"
 ssh "(echo '$TIMEZONE' | sudo tee /etc/timezone) && sudo dpkg-reconfigure --frontend noninteractive tzdata"
@@ -106,7 +134,7 @@ ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager 
 # We install mailutils just so that you can check "mail" for cronjob output
 
 working "Setting home directory default content"
-ssh "rm -rf /home/pi/*"
+ssh "rm -rfv /home/pi/*"
 scp $(find home -type file)
 
 working "Setting splash screen background"
@@ -125,5 +153,47 @@ echo "* Navigate to \"file:///home/pi/first-boot.html\""
 echo "(press enter when ready)"
 read
 
+working "Figuring out software versions"
+ssh "hostnamectl | grep 'Operating System:' | tr -s ' ' | cut -d ' ' -f 4-" > temp
+VERSION_LINUX="$(cat temp)"
+ssh "hostnamectl | grep 'Kernel:' | tr -s ' ' | cut -d ' ' -f 3-4" > temp
+VERSION_KERNEL="$(cat temp)"
+ssh "chromium-browser --version | cut -d ' ' -f 1-2" > temp
+VERSION_CHROMIUM="$(cat temp)"
+rm temp
+
 working "Removing temporary SSH pubkey, disabling SSH & shutting down"
 ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh && sudo shutdown -h now"
+
+question "Eject the SD card from the Pi, and mount it back to this computer (press enter when ready)"
+read
+
+working "Figuring out SD card device"
+# We do this again now just to be safe
+diskutil list
+DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
+
+question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"/dev/disk2\"), press enter to continue"
+read
+
+working "Safely unmounting the card"
+diskutil unmountDisk "$DISK"
+
+working "Dumping the image from the card"
+echo "This may take a long time"
+echo "You may be prompted for your password by sudo"
+sudo dd bs=1m count="$SD_SIZE_SAFE" if="$DISK" of="chilipie-kiosk-$TAG.img"
+
+working "Compressing image"
+COPYFILE_DISABLE=1 tar -zcvf chilipie-kiosk-$TAG.img.tar.gz chilipie-kiosk-$TAG.img
+
+working "Listing image sizes"
+du -hs chilipie-kiosk-$TAG.img*
+
+working "Calculating image hashes"
+openssl sha1 chilipie-kiosk-$TAG.img*
+
+working "Software versions are:"
+echo "* Linux: \`$VERSION_LINUX\`"
+echo "* Kernel: \`$VERSION_KERNEL\`"
+echo "* Chromium: \`$VERSION_CHROMIUM\`"
