@@ -56,7 +56,11 @@ echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
 sudo dd bs=1m count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK"
 
-question "Flash Raspbian Lite (2018-06-27-raspbian-stretch-lite.zip) with Etcher, then re-mount the card (press enter when ready)"
+question "Prepare baseline Raspbian:"
+echo "* Flash Raspbian Lite with Etcher"
+echo "* Eject the SD card"
+echo "* Mount the card back"
+echo "(press enter when ready)"
 read
 
 working "Updating /boot/cmdline.txt"
@@ -117,7 +121,10 @@ working "Enabling auto-login to CLI"
 SUDO_USER=pi
 ssh "sudo systemctl set-default multi-user.target"
 ssh "sudo sed /etc/systemd/system/autologin@.service -i -e \"s#^ExecStart=-/sbin/agetty --autologin [^[:space:]]*#ExecStart=-/sbin/agetty --autologin $SUDO_USER#\""
+# Set auto-login for TTY's 1-3
 ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
+ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
+ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
 
 working "Setting timezone"
 ssh "(echo '$TIMEZONE' | sudo tee /etc/timezone) && sudo dpkg-reconfigure --frontend noninteractive tzdata"

@@ -30,12 +30,13 @@ find .config/chromium/ -name "Last *" | xargs rm
 
 # Start and detach Chromium
 # http://peter.sh/experiments/chromium-command-line-switches/
-chromium-browser --start-fullscreen --disable-infobars &
+# Note that under matchbox, starting in full-screen without a window size doesn't behave well when you try to exit full screen (see https://unix.stackexchange.com/q/273989)
+chromium-browser --start-fullscreen --window-size=1920,1080 --disable-infobars &
 
 # Hide Chromium while it's starting/loading the page
 wid=`xdotool search --sync --onlyvisible --class chromium`
 xdotool windowunmap $wid
-sleep 10 # give the web page time to load
+sleep 15 # give the web page time to load
 xdotool windowmap $wid
 
 # Finally, switch process to our window manager

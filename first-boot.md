@@ -10,18 +10,17 @@ Press `F11` to exit the full screen mode, and `Ctrl + L` to focus the location b
 
 Chromium is configured to remember the URL where you left off (and all logins, etc), so this might be all the configuration you need to do!
 
-## Getting to a terminal
-
-You can get to a virtual terminal by pressing `Ctrl + Alt + F2`, and logging in with username `pi` and password `raspberry`. Use `Ctrl + Alt + F1` to switch back to Chromium.
-
 ## System configuration
 
-Use `sudo raspi-config` in the terminal to do things like:
+You can access the `raspi-config` utility by pressing `Ctrl + Alt + F2`. With it, you can do things like:
 
 * Join a WiFi network
-* Change the system timezone
 * Change your keyboard layout
+* Change the system timezone
 * Enable SSH access (it's disabled by default for security reasons)
+* Change the password (see above)
+
+Pressing `Ctrl + Alt + F1` takes you back to Chromium.
 
 ## Automating things
 
@@ -32,11 +31,28 @@ There's a few commonly useful snippets already on the crontab, such as:
 * **Automatically reloading the active page every hour**. If the page you're displaying doesn't automatically update itself, this is effectively the same as hitting `Ctrl + R` every hour. Very crude. Very effective.
 * **Cycling between open tabs every 5 minutes**. Same as above, but for `Ctrl + Tab`. Note that if you use both at the same time, you can combine them, to send the reload command *just before* sending the tab cycle command. This causes the pages to reload while they're in the background, so the user never sees it happening.
 
-Use `crontab -e` to check these out, enable the ones you want, or customize them to your heart's content.
+Press `Ctrl + Alt + F3` to get to a virtual terminal, use `crontab -e` to check these out, enable the ones you want, or customize them to your heart's content.
+
+Again, pressing `Ctrl + Alt + F1` takes you back to Chromium.
 
 ## Customizing Chromium
 
-Because you're running a fully-featured Chromium, you can customize it further by [installing browser extensions](https://chrome.google.com/webstore/category/extensions). For instance, [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) can be useful for injecting custom JS or CSS to a page you're displaying.
+Because you're running a fully-featured Chromium, you can customize it further by [installing browser extensions](https://chrome.google.com/webstore/category/extensions). For example:
+
+* **[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)** can be useful for injecting custom JS or CSS to a page you're displaying.
+* **[Ignore X-Frame headers](https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe)** can help you if you need to `<iframe>` a site that doesn't want to be framed.
+
+Finally, further tweaks can be made by changing the [Chromium command line switches](https://peter.sh/experiments/chromium-command-line-switches/) in `~/.xsession`. For example:
+
+```
+--unsafely-treat-insecure-origin-as-secure=http://shady.example.com,http://another.example.com --user-data-dir=/home/pi/.config/chromium
+```
+
+Adding these options will allow you to mix secure (i.e. HTTPS) origins with insecure ones (you need to specifically white-list them). Sometimes you need stuff like this to pull together all the bits and pieces of your dashboard from different origins. We're not saying you should. But you can.
+
+## Username and password
+
+If you need to login to a shell, the default username and password are `pi` and `raspberry`, as is tradition for Raspberry Pi. The `pi` user also has `sudo` access.
 
 ## Adjusting your resolution
 
