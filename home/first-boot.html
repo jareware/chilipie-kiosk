@@ -895,16 +895,16 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <h2 id="setting-the-url"><a class="header-link" href="#setting-the-url"></a>Setting the URL</h2>
 <p>Press <code>F11</code> to exit the full screen mode, and <code>Ctrl + L</code> to focus the location bar. Navigate away! Once done, press <code>F11</code> again to re-enter full screen mode.</p>
 <p>Chromium is configured to remember the URL where you left off (and all logins, etc), so this might be all the configuration you need to do!</p>
-<h2 id="getting-to-a-terminal"><a class="header-link" href="#getting-to-a-terminal"></a>Getting to a terminal</h2>
-<p>You can get to a virtual terminal by pressing <code>Ctrl + Alt + F2</code>, and logging in with username <code>pi</code> and password <code>raspberry</code>. Use <code>Ctrl + Alt + F1</code> to switch back to Chromium.</p>
 <h2 id="system-configuration"><a class="header-link" href="#system-configuration"></a>System configuration</h2>
-<p>Use <code>sudo raspi-config</code> in the terminal to do things like:</p>
+<p>You can access the <code>raspi-config</code> utility by pressing <code>Ctrl + Alt + F2</code>. With it, you can do things like:</p>
 <ul class="list">
 <li>Join a WiFi network</li>
-<li>Change the system timezone</li>
 <li>Change your keyboard layout</li>
+<li>Change the system timezone</li>
 <li>Enable SSH access (it&#39;s disabled by default for security reasons)</li>
+<li>Change the password (see above)</li>
 </ul>
+<p>Pressing <code>Ctrl + Alt + F1</code> takes you back to Chromium.</p>
 <h2 id="automating-things"><a class="header-link" href="#automating-things"></a>Automating things</h2>
 <p>There&#39;s a few commonly useful snippets already on the crontab, such as:</p>
 <ul class="list">
@@ -913,14 +913,23 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 <li><strong>Automatically reloading the active page every hour</strong>. If the page you&#39;re displaying doesn&#39;t automatically update itself, this is effectively the same as hitting <code>Ctrl + R</code> every hour. Very crude. Very effective.</li>
 <li><strong>Cycling between open tabs every 5 minutes</strong>. Same as above, but for <code>Ctrl + Tab</code>. Note that if you use both at the same time, you can combine them, to send the reload command <em>just before</em> sending the tab cycle command. This causes the pages to reload while they&#39;re in the background, so the user never sees it happening.</li>
 </ul>
-<p>Use <code>crontab -e</code> to check these out, enable the ones you want, or customize them to your heart&#39;s content.</p>
+<p>Press <code>Ctrl + Alt + F3</code> to get to a virtual terminal, use <code>crontab -e</code> to check these out, enable the ones you want, or customize them to your heart&#39;s content.</p>
+<p>Again, pressing <code>Ctrl + Alt + F1</code> takes you back to Chromium.</p>
 <h2 id="customizing-chromium"><a class="header-link" href="#customizing-chromium"></a>Customizing Chromium</h2>
-<p>Because you&#39;re running a fully-featured Chromium, you can customize it further by <a href="https://chrome.google.com/webstore/category/extensions">installing browser extensions</a>. For instance, <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a> can be useful for injecting custom JS or CSS to a page you&#39;re displaying.</p>
+<p>Because you&#39;re running a fully-featured Chromium, you can customize it further by <a href="https://chrome.google.com/webstore/category/extensions">installing browser extensions</a>. For example:</p>
+<ul class="list">
+<li><strong><a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Tampermonkey</a></strong> can be useful for injecting custom JS or CSS to a page you&#39;re displaying.</li>
+<li><strong><a href="https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe">Ignore X-Frame headers</a></strong> can help you if you need to <code>&lt;iframe&gt;</code> a site that doesn&#39;t want to be framed.</li>
+</ul>
+<p>Finally, further tweaks can be made by changing the <a href="https://peter.sh/experiments/chromium-command-line-switches/">Chromium command line switches</a> in <code>~/.xsession</code>. For example:</p>
+<pre class="hljs"><code>--unsafely-treat-insecure-origin-as-secure=http:<span class="hljs-regexp">//</span>shady.example.com,http:<span class="hljs-regexp">//</span>another.example.com --user-data-dir=<span class="hljs-regexp">/home/</span>pi<span class="hljs-regexp">/.config/</span>chromium</code></pre><p>Adding these options will allow you to mix secure (i.e. HTTPS) origins with insecure ones (you need to specifically white-list them). Sometimes you need stuff like this to pull together all the bits and pieces of your dashboard from different origins. We&#39;re not saying you should. But you can.</p>
+<h2 id="username-and-password"><a class="header-link" href="#username-and-password"></a>Username and password</h2>
+<p>If you need to login to a shell, the default username and password are <code>pi</code> and <code>raspberry</code>, as is tradition for Raspberry Pi. The <code>pi</code> user also has <code>sudo</code> access.</p>
 <h2 id="adjusting-your-resolution"><a class="header-link" href="#adjusting-your-resolution"></a>Adjusting your resolution</h2>
 <p>If the display auto-detection fails and chooses a funky default resolution for you, <a href="https://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html">there&#39;s a few things you can do</a> to try and fix that.</p>
 <h2 id="replacing-the-boot-graphics"><a class="header-link" href="#replacing-the-boot-graphics"></a>Replacing the boot graphics</h2>
 <p>The image that&#39;s displayed while the kiosk is starting can be changed by just replacing <code>~/background.png</code>.</p>
-<p>To change the default chilipie-kiosk boot graphics to a nice doge, for example, try <code>wget -O background.png https://bit.ly/2w1P4Il</code>.</p>
+<p>To change the default chilipie-kiosk boot graphics to a nice doge, for example, try <code>wget -O background.png bit.ly/2w1P4Il</code>.</p>
 <h2 id="increasing-boot-show-delay"><a class="header-link" href="#increasing-boot-show-delay"></a>Increasing boot show delay</h2>
 <p>By default, the browser window is hidden for a few seconds after boot, to give the page time to load. You can increase (or decrease) this delay in <code>~/.xsession</code>.</p>
     </article>
