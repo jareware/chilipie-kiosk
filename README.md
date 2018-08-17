@@ -20,7 +20,7 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 * **Cursor hiding** - if you leave a mouse plugged in, the cursor is hidden after a brief period of inactivity
 * **Automatic reboots** - reboots the Pi nightly, when nobody's watching, to keep it running smoothly
 * **Based on a recent Debian** - if you want to add your own tweaks, all the expected packages are one `apt-get` away
-* **Batteries included** - the most common how-to's and ProTips have been collected to the [first-boot document](first-boot.md)
+* **Batteries included** - the most common how-to's and ProTips have been collected to the [first-boot document](docs/first-boot.md)
 
 ## Getting started
 
@@ -29,7 +29,7 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 1. Decompress it.
 1. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
 1. Insert the SD card to your Pi and power it up.
-1. You should land in the [first-boot document](first-boot.md), for further instructions & ideas.
+1. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
 
 ## Hardware
 

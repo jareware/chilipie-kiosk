@@ -33,7 +33,7 @@ if [ ! -d "node_modules" ]; then
 fi
 rm -rf md-input md-output
 mkdir md-input md-output
-cp first-boot.md md-input
+cp docs/first-boot.md md-input
 ./node_modules/.bin/generate-md --layout github --input md-input/ --output md-output/
 ./node_modules/.bin/html-inline -i md-output/first-boot.html > home/first-boot.html
 rm -rf md-input md-output
