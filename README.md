@@ -7,8 +7,8 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 ![Screenshots](https://github.com/futurice/chilipie-kiosk/blob/master/docs/screenshot.png)
 
 ```
-☝️ Customizable, full screen        ☝️ Boots directly into a simple       ☝️ WiFi & other system config
-       startup graphics                   getting started -guide              is just one keypress away
+▲ Customizable, full screen          ▲ Boots directly into a simple       ▲ WiFi & other system config
+      startup graphics                    getting started -guide            is just one keypress away
 ```
 
 * **Boots directly to full-screen Chrome** - with all the features of a modern browser
