@@ -4,7 +4,7 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 
 ## Features
 
-![Screenshots](https://github.com/futurice/chilipie-kiosk/blob/master/screenshot.png)
+![Screenshots](https://github.com/futurice/chilipie-kiosk/blob/master/docs/screenshot.png)
 
 ```
 ☝️ Customizable, full screen        ☝️ Boots directly into a simple       ☝️ WiFi & other system config
