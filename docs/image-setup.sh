@@ -25,7 +25,7 @@ question "Enter version (e.g. \"1.2.3\") being built:"
 read TAG
 
 working "Updating version file"
-echo -e "$TAG\n\nhttps://github.com/futurice/chilipie-kiosk" > home/.chilipie-kiosk-version
+echo -e "$TAG\n\nhttps://github.com/futurice/chilipie-kiosk" > ../home/.chilipie-kiosk-version
 
 working "Generating first-boot.html"
 if [ ! -d "node_modules" ]; then
@@ -33,9 +33,9 @@ if [ ! -d "node_modules" ]; then
 fi
 rm -rf md-input md-output
 mkdir md-input md-output
-cp docs/first-boot.md md-input
+cp ../docs/first-boot.md md-input
 ./node_modules/.bin/generate-md --layout github --input md-input/ --output md-output/
-./node_modules/.bin/html-inline -i md-output/first-boot.html > home/first-boot.html
+./node_modules/.bin/html-inline -i md-output/first-boot.html > ../home/first-boot.html
 rm -rf md-input md-output
 
 question "Mount the SD card (press enter when ready)"
@@ -142,7 +142,7 @@ ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager 
 
 working "Setting home directory default content"
 ssh "rm -rfv /home/pi/*"
-scp $(find home -type file)
+scp $(find ../home -type file)
 
 working "Setting splash screen background"
 ssh "sudo rm /usr/share/plymouth/themes/pix/splash.png && sudo ln -s /home/pi/background.png /usr/share/plymouth/themes/pix/splash.png"
@@ -187,6 +187,7 @@ working "Safely unmounting the card"
 diskutil unmountDisk "$DISK"
 
 working "Dumping the image from the card"
+cd ..
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
 sudo dd bs=1m count="$SD_SIZE_SAFE" if="$DISK" of="chilipie-kiosk-$TAG.img"
