@@ -915,6 +915,22 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </ul>
 <p>Press <code>Ctrl + Alt + F3</code> to get to a virtual terminal, use <code>crontab -e</code> to check these out, enable the ones you want, or customize them to your heart&#39;s content.</p>
 <p>Again, pressing <code>Ctrl + Alt + F1</code> takes you back to Chromium.</p>
+      
+<h2 id="rotate"><a class="header-link" href="#rotate"></a>Rotate screen: portrait and landscape mode</h2> 
+<ul class="list">
+  <li>Hit CTRL-ALT-F1 then choose finish to go to console</li>
+  <li>sudo nano /boot/config.txt</li></li></li>
+  <li>move all the way down to the end of the file</li></li>
+  <li>to rotate 90° clockwise, add the line: display_rotate=1</li>
+  <li>Press ctrl + o to save and ctrl + x to exit the file</li>
+</ul>
+  Now do a reboot and you should have a screen tilted:
+<ul class="list">
+  <li>0 = 0 degrees (the default value)</li>
+  <li>1 = 90 degrees</li></li>
+  <li>2 = 180 degrees</li>
+  <li>3 = 270 degrees</li>
+</ul>
 <h2 id="customizing-chromium"><a class="header-link" href="#customizing-chromium"></a>Customizing Chromium</h2>
 <p>Because you&#39;re running a fully-featured Chromium, you can customize it further by <a href="https://chrome.google.com/webstore/category/extensions">installing browser extensions</a>. For example:</p>
 <ul class="list">
