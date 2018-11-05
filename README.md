@@ -39,6 +39,21 @@ Make sure you have a [compatible 4+ GB SD card](http://elinux.org/RPi_SD_cards).
 
 The Pi needs a [2.5 Amp power source](https://www.raspberrypi.org/documentation/hardware/raspberrypi/power/README.md). Most modern USB chargers you'll have laying around will work, but an older/cheaper one may not.
 
+## Optional features
+
+### rotate screen: portrait and landscape mode
+0 - Hit CTRL-ALT-F1 then choose finish to go to console
+1 - sudo nano /boot/config.txt
+2 - move all the way down to the end of the file
+3 - to rotate 90° clockwise, add the line: display_rotate=1
+4 - Press ctrl + o to save and ctrl + x to exit the file
+ 
+Now do a reboot and you should have a screen tilted:
+0 = 0 degrees (the default value)
+1 = 90 degrees 
+2 = 180 degrees
+3 = 270 degrees
+
 ## Common issues
 
 * **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` wasn't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
