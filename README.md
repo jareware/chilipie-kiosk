@@ -48,7 +48,7 @@ The Pi needs a [2.5 Amp power source](https://www.raspberrypi.org/documentation/
 * to rotate 90° clockwise, add the line: display_rotate=1
 * Press ctrl + o to save and ctrl + x to exit the file
  
-Now do a reboot and you should have a screen tilted:
+Now do a reboot (sudo reboot) and you should have a screen tilted:
 * 0 = 0 degrees (the default value)
 * 1 = 90 degrees 
 * 2 = 180 degrees
