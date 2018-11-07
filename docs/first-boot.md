@@ -58,6 +58,17 @@ If you need to login to a shell, the default username and password are `pi` and 
 
 If the display auto-detection fails and chooses a funky default resolution for you, [there's a few things you can do](https://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html) to try and fix that.
 
+## Rotating your screen
+
+Press `Ctrl + Alt + F3` to get to a virtual terminal, and use your favorite editor to open `/boot/config.txt` (remember to use `sudo`). Add a line to the end of the file:
+
+- `display_rotate=0` to disable rotation
+- `display_rotate=1` to rotate 90° clockwise
+- `display_rotate=2` to rotate 180°
+- `display_rotate=3` to rotate 90° counter-clockwise
+
+Save the file, and `sudo reboot`.
+
 ## Replacing the boot graphics
 
 The image that's displayed while the kiosk is starting can be changed by just replacing `~/background.png`.
