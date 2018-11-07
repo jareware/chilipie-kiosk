@@ -14,11 +14,11 @@ Chromium is configured to remember the URL where you left off (and all logins, e
 
 You can access the `raspi-config` utility by pressing `Ctrl + Alt + F2`. With it, you can do things like:
 
-* Join a WiFi network
-* Change your keyboard layout
-* Change the system timezone
-* Enable SSH access (it's disabled by default for security reasons)
-* Change the password (see above)
+- Join a WiFi network
+- Change your keyboard layout
+- Change the system timezone
+- Enable SSH access (it's disabled by default for security reasons)
+- Change the password (see above)
 
 Pressing `Ctrl + Alt + F1` takes you back to Chromium.
 
@@ -26,10 +26,10 @@ Pressing `Ctrl + Alt + F1` takes you back to Chromium.
 
 There's a few commonly useful snippets already on the crontab, such as:
 
-* **Rebooting the Pi every night at 3 AM**. If you run resource intensive pages on your dashboard, the Pi can eventually start to slow down. A nightly reboot keeps it rested and refreshed! This is enabled by default.
-* **Turning the display off for the night**. This helps save energy when there's no-one there to look at your dashboard. Sometimes also useful for reasons of vanity, when bright displays in the middle of a dark office would look ridiculous. Do make sure your display/television comes back on, however: especially older TV's sometimes won't know to automatically turn back on when the HDMI signal comes back on. In those cases, you may have luck with [CEC signals](https://timleland.com/raspberry-pi-turn-tv-onoff-cec/), but also you may not. If nothing else works, you can always just [blank the display](https://askubuntu.com/a/7299).
-* **Automatically reloading the active page every hour**. If the page you're displaying doesn't automatically update itself, this is effectively the same as hitting `Ctrl + R` every hour. Very crude. Very effective.
-* **Cycling between open tabs every 5 minutes**. Same as above, but for `Ctrl + Tab`. Note that if you use both at the same time, you can combine them, to send the reload command *just before* sending the tab cycle command. This causes the pages to reload while they're in the background, so the user never sees it happening.
+- **Rebooting the Pi every night at 3 AM**. If you run resource intensive pages on your dashboard, the Pi can eventually start to slow down. A nightly reboot keeps it rested and refreshed! This is enabled by default.
+- **Turning the display off for the night**. This helps save energy when there's no-one there to look at your dashboard. Sometimes also useful for reasons of vanity, when bright displays in the middle of a dark office would look ridiculous. Do make sure your display/television comes back on, however: especially older TV's sometimes won't know to automatically turn back on when the HDMI signal comes back on. In those cases, you may have luck with [CEC signals](https://timleland.com/raspberry-pi-turn-tv-onoff-cec/), but also you may not. If nothing else works, you can always just [blank the display](https://askubuntu.com/a/7299).
+- **Automatically reloading the active page every hour**. If the page you're displaying doesn't automatically update itself, this is effectively the same as hitting `Ctrl + R` every hour. Very crude. Very effective.
+- **Cycling between open tabs every 5 minutes**. Same as above, but for `Ctrl + Tab`. Note that if you use both at the same time, you can combine them, to send the reload command _just before_ sending the tab cycle command. This causes the pages to reload while they're in the background, so the user never sees it happening.
 
 Press `Ctrl + Alt + F3` to get to a virtual terminal, use `crontab -e` to check these out, enable the ones you want, or customize them to your heart's content.
 
@@ -39,8 +39,8 @@ Again, pressing `Ctrl + Alt + F1` takes you back to Chromium.
 
 Because you're running a fully-featured Chromium, you can customize it further by [installing browser extensions](https://chrome.google.com/webstore/category/extensions). For example:
 
-* **[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)** can be useful for injecting custom JS or CSS to a page you're displaying.
-* **[Ignore X-Frame headers](https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe)** can help you if you need to `<iframe>` a site that doesn't want to be framed.
+- **[Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo)** can be useful for injecting custom JS or CSS to a page you're displaying.
+- **[Ignore X-Frame headers](https://chrome.google.com/webstore/detail/ignore-x-frame-headers/gleekbfjekiniecknbkamfmkohkpodhe)** can help you if you need to `<iframe>` a site that doesn't want to be framed.
 
 Finally, further tweaks can be made by changing the [Chromium command line switches](https://peter.sh/experiments/chromium-command-line-switches/) in `~/.xsession`. For example:
 

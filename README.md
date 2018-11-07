@@ -11,16 +11,16 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
       startup graphics                    getting started -guide            is just one keypress away
 ```
 
-* **Boots directly to full-screen Chrome** - with all the features of a modern browser
-* **No automatic updates** - no surprises due to Chrome (or other packages) suddenly updating
-* **Automatic crash-recovery** - accidental unpowering won't result in "Chrome did not shut down correctly :("
-* **Custom startup graphics** - displays [customizable graphics](home/background.png) instead of console messages during startup
-* **Lightweight window manager** - uses [Matchbox](https://www.yoctoproject.org/tools-resources/projects/matchbox) for minimal clutter and memory footprint
-* **HDMI output control** - ready-made scripts for [turning off the display](home/crontab.example) outside of office hours, for example
-* **Cursor hiding** - if you leave a mouse plugged in, the cursor is hidden after a brief period of inactivity
-* **Automatic reboots** - reboots the Pi nightly, when nobody's watching, to keep it running smoothly
-* **Based on a recent Debian** - if you want to add your own tweaks, all the expected packages are one `apt-get` away
-* **Batteries included** - the most common how-to's and ProTips have been collected to the [first-boot document](docs/first-boot.md)
+- **Boots directly to full-screen Chrome** - with all the features of a modern browser
+- **No automatic updates** - no surprises due to Chrome (or other packages) suddenly updating
+- **Automatic crash-recovery** - accidental unpowering won't result in "Chrome did not shut down correctly :("
+- **Custom startup graphics** - displays [customizable graphics](home/background.png) instead of console messages during startup
+- **Lightweight window manager** - uses [Matchbox](https://www.yoctoproject.org/tools-resources/projects/matchbox) for minimal clutter and memory footprint
+- **HDMI output control** - ready-made scripts for [turning off the display](home/crontab.example) outside of office hours, for example
+- **Cursor hiding** - if you leave a mouse plugged in, the cursor is hidden after a brief period of inactivity
+- **Automatic reboots** - reboots the Pi nightly, when nobody's watching, to keep it running smoothly
+- **Based on a recent Debian** - if you want to add your own tweaks, all the expected packages are one `apt-get` away
+- **Batteries included** - the most common how-to's and ProTips have been collected to the [first-boot document](docs/first-boot.md)
 
 ## Getting started
 
@@ -42,23 +42,25 @@ The Pi needs a [2.5 Amp power source](https://www.raspberrypi.org/documentation/
 ## Optional features
 
 ### rotate screen: portrait and landscape mode
-* Hit CTRL-ALT-F1 then choose finish to go to console
-* sudo nano /boot/config.txt
-* move all the way down to the end of the file
-* to rotate 90° clockwise, add the line: display_rotate=1
-* Press ctrl + o to save and ctrl + x to exit the file
- 
+
+- Hit CTRL-ALT-F1 then choose finish to go to console
+- sudo nano /boot/config.txt
+- move all the way down to the end of the file
+- to rotate 90° clockwise, add the line: display_rotate=1
+- Press ctrl + o to save and ctrl + x to exit the file
+
 Now do a reboot (sudo reboot) and you should have a screen tilted:
-* 0 = 0 degrees (the default value)
-* 1 = 90 degrees 
-* 2 = 180 degrees
-* 3 = 270 degrees
+
+- 0 = 0 degrees (the default value)
+- 1 = 90 degrees
+- 2 = 180 degrees
+- 3 = 270 degrees
 
 ## Common issues
 
-* **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` wasn't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
-* **I see a "rainbow square" or "yellow lightning" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough amps from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
-* **The [display control scripts](home/display-on.sh) don't turn off the display device.** Normal PC displays will usually power down when you cut off the signal, but this is not the case for many TV's. Please check if your TV has an option in its settings for enabling this, as some do. If not, you can [try your luck with HDMI CEC signals](http://raspberrypi.stackexchange.com/questions/9142/commands-for-using-cec-client), but the TV implementations of the spec are notoriously spotty.
+- **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` wasn't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
+- **I see a "rainbow square" or "yellow lightning" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough amps from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
+- **The [display control scripts](home/display-on.sh) don't turn off the display device.** Normal PC displays will usually power down when you cut off the signal, but this is not the case for many TV's. Please check if your TV has an option in its settings for enabling this, as some do. If not, you can [try your luck with HDMI CEC signals](http://raspberrypi.stackexchange.com/questions/9142/commands-for-using-cec-client), but the TV implementations of the spec are notoriously spotty.
 
 ## Acknowledgements
 
