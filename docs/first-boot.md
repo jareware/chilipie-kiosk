@@ -69,6 +69,8 @@ Press `Ctrl + Alt + F3` to get to a virtual terminal, and use your favorite edit
 
 Save the file, and `sudo reboot`.
 
+Exotic screens may require a bit more fiddling. See [issue #41](https://github.com/futurice/chilipie-kiosk/issues/41) for ideas.
+
 ## Replacing the boot graphics
 
 The image that's displayed while the kiosk is starting can be changed by just replacing `~/background.png`.
