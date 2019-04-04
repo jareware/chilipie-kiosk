@@ -78,3 +78,9 @@ To change the default chilipie-kiosk boot graphics to a nice doge, for example, 
 ## Increasing boot show delay
 
 By default, the browser window is hidden for a few seconds after boot, to give the page time to load. You can increase (or decrease) this delay in `~/.xsession`.
+
+## Using a touch screen
+
+If your kiosk is interactive, and you're using a touch screen as a display, you may need to calibrate it. Press `Ctrl + Alt + F3` to get to a virtual terminal, and type:
+
+    DISPLAY=:0 xinput_calibrator
