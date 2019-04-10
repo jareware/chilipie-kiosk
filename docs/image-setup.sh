@@ -83,9 +83,9 @@ diskutil unmountDisk "$DISK"
 
 question "Do initial Pi setup:"
 echo "* Eject the card"
-echo "* Boot the Pi from it"
-echo "* Log in with \"pi:raspberry\""
-echo "* Use \"ifconfig\" to check the IP address of the Pi"
+echo "* Connect your Pi to Ethernet"
+echo "* Boot the Pi from your card"
+echo "* Make note of the \"My IP address is\" message at the end of boot"
 echo "Enter the IP address:"
 read IP
 
