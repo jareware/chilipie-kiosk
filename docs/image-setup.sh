@@ -17,7 +17,7 @@ function question {
   echo -e "\n🛑  $1"
 }
 function ssh {
-  /usr/bin/ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "pi@$IP" "$1"
+  /usr/bin/ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5 "pi@$IP" "$1"
 }
 function scp {
   /usr/bin/scp -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@" "pi@$IP:/home/pi"
@@ -112,8 +112,11 @@ ssh "sudo sed -i 's/raspberrypi/chilipie-kiosk/g' /etc/hosts"
 working "Rebooting the Pi"
 ssh "sudo reboot"
 
-question "Wait until the Pi has rebooted, press enter to continue"
-read
+echo "Waiting for host to come back up..."
+until ssh "echo OK"
+do
+  sleep 1
+done
 
 working "Finishing the root partition resize"
 ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
