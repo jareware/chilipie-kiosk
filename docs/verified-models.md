@@ -6,6 +6,9 @@ These Raspberry Pi models have been verified to work with each image.
 
 - ❓ Raspberry Pi 2 Model B V1.1 (@jareware 2019-04-10 -> )
 - ❓ Raspberry Pi 3 Model B V1.2 (@jareware 2019-04-10 -> )
+- ❓ Raspberry Pi 2 Model B V1.1 (@chadrien 2019-04-10 -> )
+- ❓ Raspberry Pi 3 Model B V1.2 (@chadrien 2019-04-10 -> )
+- ❓ Raspberry Pi 3 Model B+ (@chadrien 2019-04-10 -> )
 
 ## v2.0.0
 
