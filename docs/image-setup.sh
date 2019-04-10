@@ -1,6 +1,8 @@
 #!/bin/bash
 
 MOUNTED_BOOT_VOLUME="boot" # i.e. under which name is the SD card mounted under /Volumes on macOS
+BOOT_CMDLINE_TXT="/Volumes/$MOUNTED_BOOT_VOLUME/cmdline.txt"
+BOOT_CONFIG_TXT="/Volumes/$MOUNTED_BOOT_VOLUME/config.txt"
 SD_SIZE_REAL=2500 # this is in MB
 SD_SIZE_SAFE=2800 # this is in MB
 SD_SIZE_ZERO=3200 # this is in MB
@@ -63,14 +65,14 @@ echo "* Mount the card back"
 echo "(press enter when ready)"
 read
 
-working "Updating /boot/cmdline.txt"
-# The removal of "init=/usr/lib/raspi-config/init_resize.sh" disables the automatic expansion of the root FS to cover the whole SD card on first boot; the rest is for [customizing the Plymouth boot theme](https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/)
-echo -e "dwc_otg.lpm_enable=0 console=serial0,115200 console=tty3 root=PARTUUID=4d3ee428-02 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait quiet splash quiet plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0" \
-  > "/Volumes/$MOUNTED_BOOT_VOLUME/cmdline.txt"
+working "Backing up original boot files"
+cp -v "$BOOT_CMDLINE_TXT" "$BOOT_CMDLINE_TXT.backup"
+cp -v "$BOOT_CONFIG_TXT" "$BOOT_CONFIG_TXT.backup"
 
-working "Updating /boot/config.txt"
-sed -i "" "s/#disable_overscan=1/disable_overscan=1/g" "/Volumes/$MOUNTED_BOOT_VOLUME/config.txt"
-echo -e "\ndisable_splash=1" >> "/Volumes/$MOUNTED_BOOT_VOLUME/config.txt"
+working "Disabling automatic root filesystem expansion"
+echo "Updating: $BOOT_CMDLINE_TXT"
+cat "$BOOT_CMDLINE_TXT" | sed "s#init=/usr/lib/raspi-config/init_resize.sh##" > temp
+mv temp "$BOOT_CMDLINE_TXT"
 
 working "Enabling SSH for first boot"
 # https://www.raspberrypi.org/documentation/remote-access/ssh/
@@ -182,6 +184,20 @@ DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' 
 
 question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"/dev/disk2\"), press enter to continue"
 read
+
+working "Making boot quieter (part 1)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
+echo "Updating: $BOOT_CONFIG_TXT"
+sed -i "" "s/#disable_overscan=1/disable_overscan=1/g" "$BOOT_CONFIG_TXT"
+echo -e "\ndisable_splash=1" >> "$BOOT_CONFIG_TXT"
+
+working "Making boot quieter (part 2)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
+echo "You may want to revert these changes if you ever need to debug the startup process"
+echo "Updating: $BOOT_CMDLINE_TXT"
+cat "$BOOT_CMDLINE_TXT" \
+  | sed 's/console=tty1/console=tty3/' \
+  | sed 's/$/ splash plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0/' \
+  > temp
+mv temp "$BOOT_CMDLINE_TXT"
 
 working "Safely unmounting the card"
 diskutil unmountDisk "$DISK"
