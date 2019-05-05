@@ -25,11 +25,33 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 ## Getting started
 
 1. Check that you have [compatible hardware](#hardware).
-1. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
-1. Decompress it.
-1. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
-1. Insert the SD card to your Pi and power it up.
-1. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+2. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
+3. Decompress it.
+4. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
+5. *Optional*: [Setup automatic WiFi](#automatic-wifi-setup)
+6. Insert the SD card to your Pi and power it up.
+7. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+
+### Automatic WiFi setup
+
+1. After flashing remount your SD card.
+2. Create a wpa_supplicant.conf in your SD cards boot folder
+3. Copy the [sample wpa_supplicant.conf](#sample-wpasupplicantconf) file into the boot folder on the SD card.
+4. Replace `WiFi-SSID` and `WiFi-PASSWORD` with your WiFi configuration.
+5. *Optional*: Set the country code to your country code e.g. DE.
+
+#### Sample wpa_supplicant.conf
+```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
+
+network={
+    ssid="WiFi-SSID"
+    psk="WiFi-PASSWORD"
+    key_mgmt=WPA-PSK
+}
+```
 
 ## Hardware
 
