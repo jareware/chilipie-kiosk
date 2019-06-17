@@ -69,7 +69,7 @@ Press `Ctrl + Alt + F3` to get to a virtual terminal, and use your favorite edit
 
 Save the file, and `sudo reboot`.
 
-Exotic screens may require a bit more fiddling. See [issue #41](https://github.com/futurice/chilipie-kiosk/issues/41) for ideas.
+Exotic screens may require a bit more fiddling. See issues [#41](https://github.com/futurice/chilipie-kiosk/issues/41) and [#58](https://github.com/futurice/chilipie-kiosk/issues/58) for ideas.
 
 ## Replacing the boot graphics
 
