@@ -124,12 +124,22 @@ ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
 working "Enabling auto-login to CLI"
 # From: https://github.com/RPi-Distro/raspi-config/blob/985548d7ca00cab11eccbb734b63750761c1f08a/raspi-config#L955
 SUDO_USER=pi
+AUTOLOG="$(cat <<EOF
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin $SUDO_USER --noclear %I \$TERM
+EOF
+)"
+
 ssh "sudo systemctl set-default multi-user.target"
-ssh "sudo sed /etc/systemd/system/autologin@.service -i -e \"s#^ExecStart=-/sbin/agetty --autologin [^[:space:]]*#ExecStart=-/sbin/agetty --autologin $SUDO_USER#\""
+ssh "sudo mkdir -p /etc/systemd/system/getty@tty1.service.d && sudo touch /etc/systemd/system/getty@tty1.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf"
+ssh "sudo mkdir -p /etc/systemd/system/getty@tty2.service.d && sudo touch /etc/systemd/system/getty@tty2.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty2.service.d/autologin.conf"
+ssh "sudo mkdir -p /etc/systemd/system/getty@tty3.service.d && sudo touch /etc/systemd/system/getty@tty3.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty3.service.d/autologin.conf"
+
 # Set auto-login for TTY's 1-3
-ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
-ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
-ssh "sudo ln -fs /etc/systemd/system/autologin@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
+ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
+ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
+ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
 
 working "Setting timezone"
 ssh "(echo '$TIMEZONE' | sudo tee /etc/timezone) && sudo dpkg-reconfigure --frontend noninteractive tzdata"
