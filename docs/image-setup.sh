@@ -1,26 +1,75 @@
 #!/bin/bash
 
-MOUNTED_BOOT_VOLUME="boot" # i.e. under which name is the SD card mounted under /Volumes on macOS
-BOOT_CMDLINE_TXT="/Volumes/$MOUNTED_BOOT_VOLUME/cmdline.txt"
-BOOT_CONFIG_TXT="/Volumes/$MOUNTED_BOOT_VOLUME/config.txt"
+# exit on error; treat unset variables as errors; exit on errors in piped commands
+set -euo pipefail
+
+# Ensure we operate from consistent pwd for the rest of the script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" # Figure out the ABSOLUTE PATH of this script without relying on the realpath command, which may not always be available
+cd "$DIR"
+
+if [ "$OSTYPE" == "linux-gnu" ]; then
+  MOUNTED_BOOT_VOLUME="/media/$(whoami)/boot" # i.e. under which name is the SD card mounted under /media in Linux (Ubuntu)
+  SD_DD_BS="1M"
+  SD_DD_PROGRESS="status=progress"
+elif [ "$OSTYPE" == "darwin" ]; then
+  MOUNTED_BOOT_VOLUME="/Volumes/boot" # i.e. under which name is the SD card mounted under /Volumes on macOS
+  SD_DD_BS="1m"
+  SD_DD_PROGRESS=""
+else
+  echo "Error: Unsupported platform $OSTYPE, sorry"
+  exit 1
+fi
+
+BOOT_CMDLINE_TXT="$MOUNTED_BOOT_VOLUME/cmdline.txt"
+BOOT_CONFIG_TXT="$MOUNTED_BOOT_VOLUME/config.txt"
 SD_SIZE_REAL=2500 # this is in MB
 SD_SIZE_SAFE=2800 # this is in MB
 SD_SIZE_ZERO=3200 # this is in MB
-PUBKEY="$(cat ~/.ssh/id_rsa.pub)"
+SSH_PUBKEY="$(cat ~/.ssh/id_rsa.pub)"
+SSH_CONNECT_TIMEOUT=30
 KEYBOARD="us" # or e.g. "fi" for Finnish
 TIMEZONE="Etc/UTC" # or e.g. "Europe/Helsinki"; see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
+function echo-bold {
+  echo -e "$(tput -Txterm-256color bold)$1$(tput -Txterm-256color sgr 0)" # https://unix.stackexchange.com/a/269085; the -T arg accounts for $ENV not being set
+}
 function working {
-  echo -e "\n✨  $1"
+  echo-bold "\n✨  $1"
 }
 function question {
-  echo -e "\n🛑  $1"
+  echo-bold "\n🛑  $1"
 }
 function ssh {
-  /usr/bin/ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5 "pi@$IP" "$1"
+  /usr/bin/ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout="$SSH_CONNECT_TIMEOUT" "pi@$IP" "$1"
 }
 function scp {
   /usr/bin/scp -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null "$@" "pi@$IP:/home/pi"
+}
+function figureOutSdCard {
+  if [ "$OSTYPE" == "linux-gnu" ]; then
+    lsblk --fs
+    DISK="/dev/$(lsblk -l | grep "$MOUNTED_BOOT_VOLUME" | sed 's/[0-9].*//')"
+    DISK_SAMPLE="/dev/sda"
+  elif [ "$OSTYPE" == "darwin" ]; then
+    diskutil list
+    DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
+    DISK_SAMPLE="/dev/disk2"
+  else
+    echo "Error: Unsupported platform $OSTYPE, sorry"
+    exit 1
+  fi
+}
+function unmountSdCard {
+  if [ "$OSTYPE" == "linux-gnu" ]; then
+    for part in $(lsblk --list "$DISK" | grep part | sed 's/ .*//'); do
+      udisksctl unmount -b "/dev/$part"
+    done
+  elif [ "$OSTYPE" == "darwin" ]; then
+    diskutil unmountDisk "$DISK"
+  else
+    echo "Error: Unsupported platform $OSTYPE, sorry"
+    exit 1
+  fi
 }
 
 question "Enter version (e.g. \"1.2.3\") being built:"
@@ -44,19 +93,18 @@ question "Mount the SD card (press enter when ready)"
 read
 
 working "Figuring out SD card device"
-diskutil list
-DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
+figureOutSdCard
 
-question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"/dev/disk2\"), press enter to continue"
+question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"$DISK_SAMPLE\"), press enter to continue"
 read
 
 working "Safely unmounting the card"
-diskutil unmountDisk "$DISK"
+unmountSdCard
 
 working "Writing the card full of zeros (for security and compressibility reasons)"
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
-sudo dd bs=1m count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK"
+sudo dd bs="$SD_DD_BS" count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK" "$SD_DD_PROGRESS"
 
 question "Prepare baseline Raspbian:"
 echo "* Flash Raspbian Lite with Etcher"
@@ -76,10 +124,10 @@ mv temp "$BOOT_CMDLINE_TXT"
 
 working "Enabling SSH for first boot"
 # https://www.raspberrypi.org/documentation/remote-access/ssh/
-touch "/Volumes/$MOUNTED_BOOT_VOLUME/ssh"
+touch "$MOUNTED_BOOT_VOLUME/ssh"
 
 working "Safely unmounting the card"
-diskutil unmountDisk "$DISK"
+unmountSdCard
 
 question "Do initial Pi setup:"
 echo "* Eject the card"
@@ -91,7 +139,7 @@ read IP
 
 working "Installing temporary SSH pubkey"
 echo -e "Password hint: \"raspberry\""
-ssh "mkdir .ssh && echo '$PUBKEY' > .ssh/authorized_keys"
+ssh "mkdir .ssh && echo '$SSH_PUBKEY' > .ssh/authorized_keys"
 
 working "Figuring out partition start"
 ssh "echo -e 'p\nq\n' | sudo fdisk /dev/mmcblk0 | grep /dev/mmcblk0p2 | tr -s ' ' | cut -d ' ' -f 2" > temp
@@ -109,11 +157,14 @@ working "Setting hostname"
 ssh "sudo hostnamectl set-hostname chilipie-kiosk"
 ssh "sudo sed -i 's/raspberrypi/chilipie-kiosk/g' /etc/hosts"
 
+# From now on, some ssh commands will exit non-0, which should be fine
+set +e
+
 working "Rebooting the Pi"
 ssh "sudo reboot"
 
 echo "Waiting for host to come back up..."
-until ssh "echo OK"
+until SSH_CONNECT_TIMEOUT=5 ssh "echo OK"
 do
   sleep 1
 done
@@ -130,13 +181,11 @@ ExecStart=
 ExecStart=-/sbin/agetty --autologin $SUDO_USER --noclear %I \$TERM
 EOF
 )"
-
 ssh "sudo systemctl set-default multi-user.target"
+# Set auto-login for TTY's 1-3
 ssh "sudo mkdir -p /etc/systemd/system/getty@tty1.service.d && sudo touch /etc/systemd/system/getty@tty1.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf"
 ssh "sudo mkdir -p /etc/systemd/system/getty@tty2.service.d && sudo touch /etc/systemd/system/getty@tty2.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty2.service.d/autologin.conf"
 ssh "sudo mkdir -p /etc/systemd/system/getty@tty3.service.d && sudo touch /etc/systemd/system/getty@tty3.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty3.service.d/autologin.conf"
-
-# Set auto-login for TTY's 1-3
 ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
 ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
 ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
@@ -157,7 +206,7 @@ ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager 
 
 working "Setting home directory default content"
 ssh "rm -rfv /home/pi/*"
-scp $(find ../home -type file)
+scp $(find ../home -type f)
 
 working "Setting splash screen background"
 ssh "sudo rm /usr/share/plymouth/themes/pix/splash.png && sudo ln -s /home/pi/background.png /usr/share/plymouth/themes/pix/splash.png"
@@ -171,6 +220,10 @@ ssh "sudo reboot"
 question "Once the Pi has rebooted into Chromium:"
 echo "* Tell Chromium we don't want to sign in"
 echo "* Configure Chromium to start \"where you left off\""
+echo "  * F11 to exit full screen"
+echo "  * Alt + F, then S to go to Settings"
+echo "  * Type \"continue\" to filter the options"
+echo "  * Tab to select \"Continue where you left off\""
 echo "* Navigate to \"file:///home/pi/first-boot.html\""
 echo "(press enter when ready)"
 read
@@ -193,12 +246,11 @@ ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh && sudo shutdow
 question "Eject the SD card from the Pi, and mount it back to this computer (press enter when ready)"
 read
 
-working "Figuring out SD card device"
 # We do this again now just to be safe
-diskutil list
-DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
+working "Figuring out SD card device"
+figureOutSdCard
 
-question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"/dev/disk2\"), press enter to continue"
+question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"$DISK_SAMPLE\"), press enter to continue"
 read
 
 working "Making boot quieter (part 1)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
@@ -216,13 +268,13 @@ cat "$BOOT_CMDLINE_TXT" \
 mv temp "$BOOT_CMDLINE_TXT"
 
 working "Safely unmounting the card"
-diskutil unmountDisk "$DISK"
+unmountSdCard
 
 working "Dumping the image from the card"
 cd ..
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
-sudo dd bs=1m count="$SD_SIZE_SAFE" if="$DISK" of="chilipie-kiosk-$TAG.img"
+sudo dd bs="$SD_DD_BS" count="$SD_SIZE_SAFE" if="$DISK" of="chilipie-kiosk-$TAG.img" "$SD_DD_PROGRESS"
 
 working "Compressing image"
 COPYFILE_DISABLE=1 tar -zcvf chilipie-kiosk-$TAG.img.tar.gz chilipie-kiosk-$TAG.img
