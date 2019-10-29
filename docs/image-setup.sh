@@ -142,7 +142,7 @@ ssh "sudo rm /etc/profile.d/sshpwd.sh"
 ssh "echo | sudo tee /etc/motd"
 
 working "Installing packages"
-ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool"
+ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool cec-utils"
 # We install mailutils just so that you can check "mail" for cronjob output
 
 working "Setting home directory default content"
