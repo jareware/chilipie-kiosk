@@ -72,7 +72,7 @@ function unmountSdCard {
   fi
 }
 
-question "Enter version (e.g. \"1.2.3\") being built:"
+question "Enter version (e.g. \"1.2.3\") being built (without \"v\" prefix):"
 read TAG
 
 working "Updating version file"
@@ -110,6 +110,7 @@ question "Prepare baseline Raspbian:"
 echo "* Flash Raspbian Lite with Etcher"
 echo "* Eject the SD card"
 echo "* Mount the card back"
+echo "* Wait for your OS to mount it"
 echo "(press enter when ready)"
 read
 
@@ -201,7 +202,7 @@ ssh "sudo rm /etc/profile.d/sshpwd.sh"
 ssh "echo | sudo tee /etc/motd"
 
 working "Installing packages"
-ssh "sudo apt-get update && sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool"
+ssh "sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool"
 # We install mailutils just so that you can check "mail" for cronjob output
 
 working "Setting home directory default content"
