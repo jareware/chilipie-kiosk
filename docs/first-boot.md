@@ -50,6 +50,13 @@ Finally, further tweaks can be made by changing the [Chromium command line switc
 
 Adding these options will allow you to mix secure (i.e. HTTPS) origins with insecure ones (you need to specifically white-list them). Sometimes you need stuff like this to pull together all the bits and pieces of your dashboard from different origins. We're not saying you should. But you can.
 
+## Controlling the kiosk remotely
+
+Sometimes you need to do basic remote adjustments, like changing the URL that's displayed.
+
+- If you need a lot of flexibility, [you can install VNC](https://github.com/futurice/chilipie-kiosk/issues/38#issuecomment-442031274) to get a full remote desktop
+- If you just need to set the URL, you can SSH over (not enabled by default; see above), and e.g. [run something like](https://github.com/futurice/chilipie-kiosk/issues/71#issuecomment-522035239): `export DISPLAY=:0; xdotool key F11 sleep 1 key ctrl+l sleep 1 type 'https://google.com'; xdotool sleep 1 key KP_Enter; xdotool key F11`. Very crude. Very effective.
+
 ## Username and password
 
 If you need to login to a shell, the default username and password are `pi` and `raspberry`, as is tradition for Raspberry Pi. The `pi` user also has `sudo` access.
