@@ -156,7 +156,7 @@ ssh "echo -e 'd\n2\nn\np\n2\n$START\n+${SD_SIZE_REAL}M\ny\nw\n' | sudo fdisk /de
 working "Setting hostname"
 # We want to do this right before reboot, so we don't get a lot of unnecessary complaints about "sudo: unable to resolve host chilipie-kiosk" (https://askubuntu.com/a/59517)
 ssh "sudo hostnamectl set-hostname chilipie-kiosk"
-ssh "sudo sed -i 's/raspberrypi/chilipie-kiosk/g' /etc/hosts"
+ssh "sudo perl -i -p0e 's/raspberrypi/chilipie-kiosk/g' /etc/hosts" # "perl" is more cross-platform than "sed -i"
 
 # From now on, some ssh commands will exit non-0, which should be fine
 set +e
@@ -256,7 +256,7 @@ read
 
 working "Making boot quieter (part 1)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
 echo "Updating: $BOOT_CONFIG_TXT"
-sed -i "" "s/#disable_overscan=1/disable_overscan=1/g" "$BOOT_CONFIG_TXT"
+perl -i -p0e "s/#disable_overscan=1/disable_overscan=1/g" "$BOOT_CONFIG_TXT"
 echo -e "\ndisable_splash=1" >> "$BOOT_CONFIG_TXT"
 
 working "Making boot quieter (part 2)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
