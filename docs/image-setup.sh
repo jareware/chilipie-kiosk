@@ -174,6 +174,9 @@ ssh "chromium-browser --version | cut -d ' ' -f 1-2" > temp
 VERSION_CHROMIUM="$(cat temp)"
 rm temp
 
+working "Removing SSH host keys & enable regeneration"
+ssh "sudo rm -f -v /etc/ssh/ssh_host_*_key* && sudo systemctl enable regenerate_ssh_host_keys"
+
 working "Removing temporary SSH pubkey, disabling SSH & shutting down"
 ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh && sudo shutdown -h now"
 
