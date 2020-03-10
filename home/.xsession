@@ -35,7 +35,9 @@ chromium-browser \
   --start-fullscreen \
   --window-size=1920,1080 \
   --disable-infobars \
+  --check-for-update-interval=1 --simulate-critical-update \
   &
+# See https://github.com/futurice/chilipie-kiosk/issues/99#issuecomment-597119842 for the need for the fishy-sounding "--check-for-update-interval=1 --simulate-critical-update" switches; TODO: remove when not needed
 
 # Hide Chromium while it's starting/loading the page
 wid=`xdotool search --sync --onlyvisible --class chromium`
