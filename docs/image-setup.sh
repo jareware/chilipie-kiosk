@@ -27,6 +27,8 @@ SD_SIZE_SAFE=2800 # this is in MB
 SD_SIZE_ZERO=3200 # this is in MB
 SSH_PUBKEY="$(cat ~/.ssh/id_rsa.pub)"
 SSH_CONNECT_TIMEOUT=30
+LOCALE="en_US.UTF-8 UTF-8" # or e.g. "fi_FI.UTF-8 UTF-8" for Finland
+LANGUAGE="en_US.UTF-8" # should match above
 KEYBOARD="us" # or e.g. "fi" for Finnish
 TIMEZONE="Etc/UTC" # or e.g. "Europe/Helsinki"; see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
@@ -172,6 +174,11 @@ done
 
 working "Finishing the root partition resize"
 ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
+
+working "Setting locale"
+ssh "echo $LOCALE | sudo tee /etc/locale.gen"
+ssh "sudo locale-gen"
+ssh "echo -e \"LANGUAGE=$LANGUAGE\nLC_ALL=$LANGUAGE\" | sudo tee /etc/environment"
 
 working "Enabling auto-login to CLI"
 # From: https://github.com/RPi-Distro/raspi-config/blob/985548d7ca00cab11eccbb734b63750761c1f08a/raspi-config#L955
