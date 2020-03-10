@@ -74,7 +74,11 @@ function unmountSdCard {
   fi
 }
 
-question "Enter version (e.g. \"1.2.3\") being built (without \"v\" prefix):"
+question "Enter version (e.g. \"1.2.3\") being built"
+echo "Omit the \"v\" prefix, it'll be added where needed"
+echo "For alpha/beta builds, use a \"-betaN\" suffic"
+echo "For RC builds, DO NOT use any suffix, as then the same image can't be promoted to stable without rebuilding"
+echo "Enter version:"
 read TAG
 
 working "Updating version file"
