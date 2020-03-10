@@ -155,6 +155,12 @@ read
 working "Resizing the root partition on the Pi"
 ssh "echo -e 'd\n2\nn\np\n2\n$START\n+${SD_SIZE_REAL}M\ny\nw\n' | sudo fdisk /dev/mmcblk0"
 
+working "Setting locale"
+# We want to do this as early as possible, so perl et al won't complain about misconfigured locales for the rest of the image prep
+ssh "echo $LOCALE | sudo tee /etc/locale.gen"
+ssh "sudo locale-gen"
+ssh "echo -e \"LANGUAGE=$LANGUAGE\nLC_ALL=$LANGUAGE\" | sudo tee /etc/environment"
+
 working "Setting hostname"
 # We want to do this right before reboot, so we don't get a lot of unnecessary complaints about "sudo: unable to resolve host chilipie-kiosk" (https://askubuntu.com/a/59517)
 ssh "sudo hostnamectl set-hostname chilipie-kiosk"
@@ -174,11 +180,6 @@ done
 
 working "Finishing the root partition resize"
 ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
-
-working "Setting locale"
-ssh "echo $LOCALE | sudo tee /etc/locale.gen"
-ssh "sudo locale-gen"
-ssh "echo -e \"LANGUAGE=$LANGUAGE\nLC_ALL=$LANGUAGE\" | sudo tee /etc/environment"
 
 # From raspi-config: https://github.com/RPi-Distro/raspi-config/blob/c0ddae8a2e99ecf15759c7cb8f0681cb0e7ce63a/raspi-config#L1141
 # See also: https://github.com/futurice/chilipie-kiosk/issues/61#issuecomment-524622522
