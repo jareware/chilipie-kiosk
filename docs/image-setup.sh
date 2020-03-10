@@ -205,7 +205,7 @@ ssh "sudo rm /etc/profile.d/sshpwd.sh /etc/profile.d/wifi-check.sh" # remove war
 ssh "touch .hushlogin" # https://scribles.net/silent-boot-on-raspbian-stretch-in-console-mode/
 
 working "Installing packages"
-ssh "sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool"
+ssh "sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool rng-tools"
 # We install mailutils just so that you can check "mail" for cronjob output
 
 working "Setting home directory default content"
