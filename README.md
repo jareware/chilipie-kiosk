@@ -35,10 +35,10 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 ### Automatic WiFi setup
 
 1. After flashing remount your SD card.
-2. Create a wpa_supplicant.conf in your SD cards boot folder
+2. Create a `wpa_supplicant.conf` in your SD cards boot folder
 3. Copy the [sample wpa_supplicant.conf](#sample-wpasupplicantconf) file into the boot folder on the SD card.
 4. Replace `WiFi-SSID` and `WiFi-PASSWORD` with your WiFi configuration.
-5. *Optional*: Set the country code to your country code e.g. DE.
+5. Optional: Set the country code to your country code e.g. `DE`.
 
 #### Sample wpa_supplicant.conf
 ```
@@ -47,9 +47,9 @@ update_config=1
 country=US
 
 network={
-    ssid="WiFi-SSID"
-    psk="WiFi-PASSWORD"
-    key_mgmt=WPA-PSK
+  ssid="WiFi-SSID"
+  psk="WiFi-PASSWORD"
+  key_mgmt=WPA-PSK
 }
 ```
 
