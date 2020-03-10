@@ -200,9 +200,9 @@ ssh "(echo '$TIMEZONE' | sudo tee /etc/timezone) && sudo dpkg-reconfigure --fron
 working "Setting keyboard layout"
 ssh "(echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="$KEYBOARD"\nXKBVARIANT=""\nXKBOPTIONS=""\nBACKSPACE="guess"\n' | sudo tee /etc/default/keyboard) && sudo dpkg-reconfigure --frontend noninteractive keyboard-configuration"
 
-working "Shortening message-of-the-day for logins"
-ssh "sudo rm /etc/profile.d/sshpwd.sh"
-ssh "echo | sudo tee /etc/motd"
+working "Silencing console logins" # this is to avoid a brief flash of the console login before X comes up
+ssh "sudo rm /etc/profile.d/sshpwd.sh /etc/profile.d/wifi-check.sh" # remove warnings about default password and WiFi country (https://raspberrypi.stackexchange.com/a/105234)
+ssh "touch .hushlogin" # https://scribles.net/silent-boot-on-raspbian-stretch-in-console-mode/
 
 working "Installing packages"
 ssh "sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool"
