@@ -76,6 +76,8 @@ Press `Ctrl + Alt + F3` to get to a virtual terminal, and use your favorite edit
 
 Save the file, and `sudo reboot`.
 
+Note that on the Pi 4, you'll need to disable the `dtoverlay=vc4-fkms-v3d` line in `/boot/config.txt` for this to work. But then that [may cause other issues](https://www.reddit.com/r/raspberry_pi/comments/dw1376/dtoverlayvc4fkmsv3d_causes_display_to_shift_right/). This is hopefully fixed in a future Raspbian release.
+
 Exotic screens may require a bit more fiddling. See issues [#41](https://github.com/futurice/chilipie-kiosk/issues/41) and [#58](https://github.com/futurice/chilipie-kiosk/issues/58) for ideas.
 
 ## Replacing the boot graphics
