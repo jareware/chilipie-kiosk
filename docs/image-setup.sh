@@ -180,23 +180,19 @@ ssh "echo $LOCALE | sudo tee /etc/locale.gen"
 ssh "sudo locale-gen"
 ssh "echo -e \"LANGUAGE=$LANGUAGE\nLC_ALL=$LANGUAGE\" | sudo tee /etc/environment"
 
+# From raspi-config: https://github.com/RPi-Distro/raspi-config/blob/c0ddae8a2e99ecf15759c7cb8f0681cb0e7ce63a/raspi-config#L1141
+# See also: https://github.com/futurice/chilipie-kiosk/issues/61#issuecomment-524622522
 working "Enabling auto-login to CLI"
-# From: https://github.com/RPi-Distro/raspi-config/blob/985548d7ca00cab11eccbb734b63750761c1f08a/raspi-config#L955
-SUDO_USER=pi
-AUTOLOG="$(cat <<EOF
-[Service]
-ExecStart=
-ExecStart=-/sbin/agetty --autologin $SUDO_USER --noclear %I \$TERM
-EOF
-)"
-ssh "sudo systemctl set-default multi-user.target"
-# Set auto-login for TTY's 1-3
-ssh "sudo mkdir -p /etc/systemd/system/getty@tty1.service.d && sudo touch /etc/systemd/system/getty@tty1.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf"
-ssh "sudo mkdir -p /etc/systemd/system/getty@tty2.service.d && sudo touch /etc/systemd/system/getty@tty2.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty2.service.d/autologin.conf"
-ssh "sudo mkdir -p /etc/systemd/system/getty@tty3.service.d && sudo touch /etc/systemd/system/getty@tty3.service.d/autologin.conf && sudo echo '$AUTOLOG' | sudo tee /etc/systemd/system/getty@tty3.service.d/autologin.conf"
-ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
-ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
-ssh "sudo ln -fs /etc/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
+ssh "systemctl set-default multi-user.target"
+ssh "ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service"
+ssh "ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty2.service"
+ssh "ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty3.service"
+ssh "mkdir -p /etc/systemd/system/getty@tty1.service.d"
+ssh "mkdir -p /etc/systemd/system/getty@tty2.service.d"
+ssh "mkdir -p /etc/systemd/system/getty@tty3.service.d"
+ssh "echo -e '[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n' | sudo tee /etc/systemd/system/getty@tty1.service.d/autologin.conf"
+ssh "echo -e '[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n' | sudo tee /etc/systemd/system/getty@tty2.service.d/autologin.conf"
+ssh "echo -e '[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n' | sudo tee /etc/systemd/system/getty@tty3.service.d/autologin.conf"
 
 working "Setting timezone"
 ssh "(echo '$TIMEZONE' | sudo tee /etc/timezone) && sudo dpkg-reconfigure --frontend noninteractive tzdata"
