@@ -208,6 +208,7 @@ ssh "(echo -e 'XKBMODEL="pc105"\nXKBLAYOUT="$KEYBOARD"\nXKBVARIANT=""\nXKBOPTION
 working "Silencing console logins" # this is to avoid a brief flash of the console login before X comes up
 ssh "sudo rm /etc/profile.d/sshpwd.sh /etc/profile.d/wifi-check.sh" # remove warnings about default password and WiFi country (https://raspberrypi.stackexchange.com/a/105234)
 ssh "touch .hushlogin" # https://scribles.net/silent-boot-on-raspbian-stretch-in-console-mode/
+ssh "sudo perl -i -p0e 's#--autologin pi#--skip-login --noissue --login-options \"-f pi\"#g' /etc/systemd/system/getty@tty1.service.d/autologin.conf" # "perl" is more cross-platform than "sed -i"
 
 working "Installing packages"
 ssh "sudo apt-get update && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool rng-tools"
