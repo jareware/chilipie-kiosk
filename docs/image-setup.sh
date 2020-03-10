@@ -95,7 +95,8 @@ cp ../docs/first-boot.md md-input
 ./node_modules/.bin/html-inline -i md-output/first-boot.html > ../home/first-boot.html
 rm -rf md-input md-output
 
-question "Mount the SD card (press enter when ready)"
+question "Physically mount the SD card to this machine "
+echo "(press enter when ready)"
 read
 
 working "Figuring out SD card device"
@@ -256,7 +257,8 @@ ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh"
 working "Powering off the Pi"
 ssh "sudo poweroff"
 
-question "Eject the SD card from the Pi, and mount it back to this computer (press enter when ready)"
+question "Eject the SD card from the Pi, and mount it back to this computer"
+echo "(press enter when ready)"
 read
 
 # We do this again now just to be safe
