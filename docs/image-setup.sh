@@ -36,10 +36,10 @@ function echo-bold {
   echo -e "$(tput -Txterm-256color bold)$1$(tput -Txterm-256color sgr 0)" # https://unix.stackexchange.com/a/269085; the -T arg accounts for $ENV not being set
 }
 function working {
-  echo-bold "\n✨  $1"
+  echo-bold "\n[WORKING] $1"
 }
 function question {
-  echo-bold "\n🛑  $1"
+  echo-bold "\n[QUESTION] $1"
 }
 function ssh {
   /usr/bin/ssh -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout="$SSH_CONNECT_TIMEOUT" "pi@$IP" "$1"
