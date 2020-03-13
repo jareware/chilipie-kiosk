@@ -102,13 +102,16 @@ read
 working "Figuring out SD card device"
 figureOutSdCard
 
-question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"$DISK_SAMPLE\"), press enter to continue"
+question "Based on the above, SD card determined to be \"$DISK\""
+echo "Should be e.g. \"$DISK_SAMPLE\""
+echo "(press enter to confirm)"
 read
 
 working "Safely unmounting the card"
 unmountSdCard
 
-working "Writing the card full of zeros (for security and compressibility reasons)"
+working "Writing the card full of zeros"
+# ...for security and compressibility reasons
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
 sudo dd bs="$SD_DD_BS" count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK" "$SD_DD_PROGRESS"
@@ -154,10 +157,12 @@ ssh "echo -e 'p\nq\n' | sudo fdisk /dev/mmcblk0 | grep /dev/mmcblk0p2 | tr -s ' 
 START="$(cat temp)"
 rm temp
 
-question "Partition start determined to be \"$START\" (should be e.g. \"98304\"), press enter to continue"
+question "Partition start determined to be \"$START\""
+echo "Should be e.g. \"98304\""
+echo "(press enter to confirm)"
 read
 
-working "Resizing the root partition on the Pi"
+working "Resizing the root partition"
 ssh "echo -e 'd\n2\nn\np\n2\n$START\n+${SD_SIZE_REAL}M\ny\nw\n' | sudo fdisk /dev/mmcblk0"
 
 working "Setting locale"
@@ -248,7 +253,7 @@ ssh "chromium-browser --version | cut -d ' ' -f 1-2" > temp
 VERSION_CHROMIUM="$(cat temp)"
 rm temp
 
-working "Removing SSH host keys & enable regeneration"
+working "Removing SSH host keys & enabling regeneration"
 ssh "sudo rm -f -v /etc/ssh/ssh_host_*_key* && sudo systemctl enable regenerate_ssh_host_keys"
 
 working "Removing temporary SSH pubkey & disabling SSH & shutting down"
@@ -262,7 +267,9 @@ read
 working "Figuring out SD card device"
 figureOutSdCard
 
-question "Based on the above, SD card determined to be \"$DISK\" (should be e.g. \"$DISK_SAMPLE\"), press enter to continue"
+question "Based on the above, SD card determined to be \"$DISK\""
+echo "Should be e.g. \"$DISK_SAMPLE\""
+echo "(press enter to confirm)"
 read
 
 working "Making boot quieter (part 1)" # https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
