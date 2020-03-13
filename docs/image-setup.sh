@@ -251,11 +251,8 @@ rm temp
 working "Removing SSH host keys & enable regeneration"
 ssh "sudo rm -f -v /etc/ssh/ssh_host_*_key* && sudo systemctl enable regenerate_ssh_host_keys"
 
-working "Removing temporary SSH pubkey & disabling SSH"
-ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh"
-
-working "Powering off the Pi"
-ssh "sudo poweroff"
+working "Removing temporary SSH pubkey & disabling SSH & shutting down"
+ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh && sudo nohup poweroff"
 
 question "Eject the SD card from the Pi, and mount it back to this computer"
 echo "(press enter when ready)"
