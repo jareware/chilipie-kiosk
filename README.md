@@ -28,9 +28,18 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 2. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
 3. Decompress it.
 4. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
-5. *Optional*: [Setup automatic WiFi](#automatic-wifi-setup)
-6. Insert the SD card to your Pi and power it up.
-7. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+5. *Optional*: [Set URL before boot](#set-url-before-boot)
+6. *Optional*: [Setup automatic WiFi](#automatic-wifi-setup)
+7. Insert the SD card to your Pi and power it up.
+8. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+
+### Set URL before boot
+
+1. After flashing remount your SD card.
+2. Create a *chilipie_url.txt* in your SD cards boot folder or */home/pi*.
+3. Write URL in **first** line of file.
+
+Note: You can user `${SERIAL}` to get Pi's serial number into URL.  
 
 ### Automatic WiFi setup
 
