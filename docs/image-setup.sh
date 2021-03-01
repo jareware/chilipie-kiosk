@@ -9,15 +9,10 @@ cd "$DIR"
 
 if [ "$OSTYPE" == "linux-gnu" ]; then
   MOUNTED_BOOT_VOLUME="/media/$(whoami)/boot" # i.e. under which name is the SD card mounted under /media in Linux (Ubuntu)
-  SD_DD_BS="1M"
-  SD_DD_PROGRESS="status=progress"
-elif [ "$OSTYPE" == "darwin" ]; then
+elif [[ "$OSTYPE" == darwin* ]]; then
   MOUNTED_BOOT_VOLUME="/Volumes/boot" # i.e. under which name is the SD card mounted under /Volumes on macOS
-  SD_DD_BS="1m"
-  SD_DD_PROGRESS=""
 else
-  echo "Error: Unsupported platform $OSTYPE, sorry"
-  exit 1
+  echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
 fi
 
 BOOT_CMDLINE_TXT="$MOUNTED_BOOT_VOLUME/cmdline.txt"
@@ -52,13 +47,12 @@ function figureOutSdCard {
     lsblk --fs
     DISK="/dev/$(lsblk -l | grep "$MOUNTED_BOOT_VOLUME" | sed 's/[0-9].*//')"
     DISK_SAMPLE="/dev/sda"
-  elif [ "$OSTYPE" == "darwin" ]; then
+  elif [[ "$OSTYPE" == darwin* ]]; then
     diskutil list
     DISK="$(diskutil list | grep /dev/ | grep external | grep physical | cut -d ' ' -f 1 | head -n 1)"
     DISK_SAMPLE="/dev/disk2"
   else
-    echo "Error: Unsupported platform $OSTYPE, sorry"
-    exit 1
+    echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
   fi
 }
 function unmountSdCard {
@@ -66,11 +60,10 @@ function unmountSdCard {
     for part in $(lsblk --list "$DISK" | grep part | sed 's/ .*//'); do
       udisksctl unmount -b "/dev/$part"
     done
-  elif [ "$OSTYPE" == "darwin" ]; then
+  elif [[ "$OSTYPE" == darwin* ]]; then
     diskutil unmountDisk "$DISK"
   else
-    echo "Error: Unsupported platform $OSTYPE, sorry"
-    exit 1
+    echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
   fi
 }
 
@@ -114,7 +107,13 @@ working "Writing the card full of zeros"
 # ...for security and compressibility reasons
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
-sudo dd bs="$SD_DD_BS" count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK" "$SD_DD_PROGRESS"
+if [ "$OSTYPE" == "linux-gnu" ]; then
+  sudo dd bs=1M count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK" status=progress
+elif [[ "$OSTYPE" == darwin* ]]; then
+  sudo dd bs=1m count="$SD_SIZE_ZERO" if=/dev/zero of="$DISK"
+else
+  echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
+fi
 
 question "Prepare baseline Raspbian:"
 echo "* Flash Raspbian Lite with Etcher"
@@ -191,7 +190,7 @@ done
 working "Finishing the root partition resize"
 ssh "df -h . && sudo resize2fs /dev/mmcblk0p2 && df -h ."
 
-# From raspi-config: https://github.com/RPi-Distro/raspi-config/blob/c0ddae8a2e99ecf15759c7cb8f0681cb0e7ce63a/raspi-config#L1141
+# From raspi-config: https://github.com/RPi-Distro/raspi-config/blob/d98686647ced7c0c0490dc123432834735d1c13d/raspi-config#L1313-L1321
 # See also: https://github.com/futurice/chilipie-kiosk/issues/61#issuecomment-524622522
 working "Enabling auto-login to CLI"
 ssh "sudo systemctl set-default multi-user.target"
@@ -256,8 +255,11 @@ rm temp
 working "Removing SSH host keys & enabling regeneration"
 ssh "sudo rm -f -v /etc/ssh/ssh_host_*_key* && sudo systemctl enable regenerate_ssh_host_keys"
 
-working "Removing temporary SSH pubkey & disabling SSH & shutting down"
-ssh "(echo > .ssh/authorized_keys) && sudo systemctl disable ssh && sudo nohup poweroff"
+working "Removing temporary SSH pubkey, disabling SSH & shutting down"
+tempFile="$(ssh mktemp)"
+ssh "chmod a+x $tempFile"
+ssh "echo 'rm .ssh/authorized_keys && systemctl disable ssh && poweroff' > $tempFile"
+ssh "sudo nohup $tempFile"
 
 question "Eject the SD card from the Pi, and mount it back to this computer"
 echo "(press enter when ready)"
@@ -293,7 +295,13 @@ working "Dumping the image from the card"
 cd ..
 echo "This may take a long time"
 echo "You may be prompted for your password by sudo"
-sudo dd bs="$SD_DD_BS" count="$SD_SIZE_SAFE" if="$DISK" of="chilipie-kiosk-$TAG.img" "$SD_DD_PROGRESS"
+if [ "$OSTYPE" == "linux-gnu" ]; then
+  sudo dd bs=1M count="$SD_SIZE_ZERO" if="$DISK" of="chilipie-kiosk-$TAG.img" status=progress
+elif [[ "$OSTYPE" == darwin* ]]; then
+  sudo dd bs=1m count="$SD_SIZE_ZERO" if="$DISK" of="chilipie-kiosk-$TAG.img"
+else
+  echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
+fi
 
 working "Compressing image"
 COPYFILE_DISABLE=1 tar -zcvf chilipie-kiosk-$TAG.img.tar.gz chilipie-kiosk-$TAG.img
