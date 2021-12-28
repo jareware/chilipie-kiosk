@@ -28,9 +28,18 @@ Easy-to-use **Raspberry Pi** image for booting directly into **full-screen Chrom
 2. Download the [latest image](https://github.com/futurice/chilipie-kiosk/releases).
 3. Decompress it.
 4. Flash the image onto your SD card. We recommend [Etcher](https://etcher.io/) for this: it's delightfully easy to use, cross platform, and will verify the result automatically. If you know what you're doing, you can of course also just `sudo dd bs=1m if=chilipie-kiosk-vX.Y.Z.img of=/dev/rdisk2`.
-5. *Optional*: [Setup automatic WiFi](#automatic-wifi-setup)
-6. Insert the SD card to your Pi and power it up.
-7. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+5. *Optional*: [Set URL before boot](#set-url-before-boot)
+6. *Optional*: [Setup automatic WiFi](#automatic-wifi-setup)
+7. Insert the SD card to your Pi and power it up.
+8. You should land in the [first-boot document](docs/first-boot.md), for further instructions & ideas.
+
+### Set URL before boot
+
+1. After flashing remount your SD card.
+2. Create a *chilipie_url.txt* in your SD cards boot folder or */home/pi*.
+3. Write URL in **first** line of file.
+
+Note: You can user `${SERIAL}` to get Pi's serial number into URL.  
 
 ### Automatic WiFi setup
 
@@ -66,6 +75,7 @@ The Pi needs a [2.5 Amp power source](https://www.raspberrypi.org/documentation/
 - **I get a kernel panic on boot, or the image keeps crashing.** The Raspberry Pi is somewhat picky about about its SD cards. It's also possible the SD card has a bad sector in a critical place, and `dd` wasn't be able to tell you. Double-check that you're using [a blessed SD card](http://elinux.org/RPi_SD_cards), and try flashing the image again.
 - **I see a "rainbow square" or "yellow lightning" in the top right corner of the screen, and the device seems unstable.** This usually means the Pi isn't getting enough amps from your power supply. This is sometimes the case in more exotic setups (e.g. using the USB port of your display to power the Pi) or with cheap power supplies. Try another one.
 - **The [display control scripts](home/display-on.sh) don't turn off the display device.** Normal PC displays will usually power down when you cut off the signal, but this is not the case for many TV's. Please check if your TV has an option in its settings for enabling this, as some do. If not, you can [try your luck with HDMI CEC signals](http://raspberrypi.stackexchange.com/questions/9142/commands-for-using-cec-client), but the TV implementations of the spec are notoriously spotty.
+- **The MicroSD card isn't flashing correctly, I don't see the boot partition.** This commonly happens on Windows computers and can be fixed by extracting the `chilipie*.img` file from the `tar.gz`. You will need to use an extraction tool that supports both gzip and tar archive formats, such as 7zip. Extract the contents of the `img.tar.gz` file, then extract the contents of the resulting `img.tar` file again. You should be left with an `.img` file, which you can then use with Etcher to flash your SD card.
 
 ## Acknowledgements
 

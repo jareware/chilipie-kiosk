@@ -26,7 +26,19 @@ if [ -f .config/chromium/Default/Preferences ]; then
 fi
 
 # Remove notes of previous sessions, if any
-find .config/chromium/ -name "Last *" | xargs rm
+find .config/chromium/ -name "Last *" -exec rm {} +
+
+# Get URL from file (if set)
+URL=""
+if [ -f /boot/chilipie_url.txt ]; then
+    URL="$(head -n 1 /boot/chilipie_url.txt)"
+elif [ -f /home/pi/chilipie_url.txt ]; then
+    URL="$(head -n 1 /home/pi/chilipie_url.txt)"
+fi
+if [ -n "$URL" ]; then
+    SERIAL="$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2 | xargs)" # Get serial number
+    URL="$(echo $URL | SERIAL=$SERIAL envsubst '$SERIAL')"
+fi
 
 # Start and detach Chromium
 # http://peter.sh/experiments/chromium-command-line-switches/
@@ -36,7 +48,7 @@ chromium-browser \
   --window-position=9000,9000 \
   --disable-infobars \
   --check-for-update-interval=1 --simulate-critical-update \
-  &
+  $URL &
 # See https://github.com/futurice/chilipie-kiosk/issues/99#issuecomment-597119842 for the need for the fishy-sounding "--check-for-update-interval=1 --simulate-critical-update" switches; TODO: remove when not needed
 
 # Hide Chromium while it's starting/loading the page
