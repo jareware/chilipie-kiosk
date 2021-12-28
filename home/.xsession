@@ -28,10 +28,22 @@ fi
 # Remove notes of previous sessions, if any
 find .config/chromium/ -name "Last *" | xargs rm
 
+# Get URL from file (if set)
+URL=""
+if [ -f /boot/chilipie_url.txt ]; then
+    URL="$(head -n 1 /boot/chilipie_url.txt)"
+elif [ -f /home/pi/chilipie_url.txt ]; then
+    URL="$(head -n 1 /home/pi/chilipie_url.txt)"
+fi
+if [ -n "$URL" ]; then
+    SERIAL="$(cat /proc/cpuinfo | grep Serial | cut -d ' ' -f 2 | xargs)" # Get serial number
+    URL="$(echo $URL | SERIAL=$SERIAL envsubst '$SERIAL')"
+fi
+
 # Start and detach Chromium
 # http://peter.sh/experiments/chromium-command-line-switches/
 # Note that under matchbox, starting in full-screen without a window size doesn't behave well when you try to exit full screen (see https://unix.stackexchange.com/q/273989)
-chromium-browser --start-fullscreen --window-size=1920,1080 --disable-infobars &
+chromium-browser --start-fullscreen --window-size=1920,1080 --disable-infobars $URL &
 
 # Hide Chromium while it's starting/loading the page
 wid=`xdotool search --sync --onlyvisible --class chromium`
