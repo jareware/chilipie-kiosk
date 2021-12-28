@@ -115,8 +115,8 @@ else
   echo "Error: Unsupported platform $OSTYPE, sorry" && exit 1
 fi
 
-question "Prepare baseline Raspbian:"
-echo "* Flash Raspbian Lite with Etcher"
+question "Prepare baseline Raspberry Pi OS Lite:"
+echo "* Flash the OS with Raspberry Pi Imager"
 echo "* Eject the SD card"
 echo "* Mount the card back"
 echo "* Wait for your OS to mount it"
@@ -252,13 +252,10 @@ ssh "chromium-browser --version | cut -d ' ' -f 1-2" > temp
 VERSION_CHROMIUM="$(cat temp)"
 rm temp
 
-working "Removing SSH host keys & enabling regeneration"
-ssh "sudo rm -f -v /etc/ssh/ssh_host_*_key* && sudo systemctl enable regenerate_ssh_host_keys"
-
-working "Removing temporary SSH pubkey, disabling SSH & shutting down"
-tempFile="$(ssh mktemp)"
+working "Disabling SSH access & restoring safe defaults & shutting down"
+tempFile="$(ssh mktemp)" # need to do this via a temp file on the host, otherwise disabling SSH while using SSH ends up being problematic
 ssh "chmod a+x $tempFile"
-ssh "echo 'rm .ssh/authorized_keys && systemctl disable ssh && poweroff' > $tempFile"
+ssh "echo 'rm -f /etc/ssh/ssh_host_*_key*; systemctl enable regenerate_ssh_host_keys; rm .ssh/authorized_keys; systemctl disable ssh; poweroff' > $tempFile"
 ssh "sudo nohup $tempFile"
 
 question "Eject the SD card from the Pi, and mount it back to this computer"
