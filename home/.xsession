@@ -26,7 +26,7 @@ if [ -f .config/chromium/Default/Preferences ]; then
 fi
 
 # Remove notes of previous sessions, if any
-find .config/chromium/ -name "Last *" | xargs rm
+find .config/chromium/ -name "Last *" -exec rm {} +
 
 # Get URL from file (if set)
 URL=""
