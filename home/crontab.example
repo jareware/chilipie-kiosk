@@ -14,6 +14,7 @@ DISPLAY=:0.0
 0 3 * * * sudo reboot
 
 # Example: Turn display on weekdays at 7 AM
+# Note: You may exchange "display-on" / "display-off" with "cec-on" / "cec-off" in order to use HDMI CEC
 # 0 7 * * 1-5 ~/display-on.sh
 
 # Example: Turn display off weekdays at 7 PM (and after the nightly reboot)
