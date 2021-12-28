@@ -50,6 +50,13 @@ Finally, further tweaks can be made by changing the [Chromium command line switc
 
 Adding these options will allow you to mix secure (i.e. HTTPS) origins with insecure ones (you need to specifically white-list them). Sometimes you need stuff like this to pull together all the bits and pieces of your dashboard from different origins. We're not saying you should. But you can.
 
+## Controlling the kiosk remotely
+
+Sometimes you need to do basic remote adjustments, like changing the URL that's displayed.
+
+- If you need a lot of flexibility, [you can install VNC](https://github.com/futurice/chilipie-kiosk/issues/38#issuecomment-442031274) to get a full remote desktop
+- If you just need to set the URL, you can SSH over (not enabled by default; see above), and e.g. [run something like](https://github.com/futurice/chilipie-kiosk/issues/71#issuecomment-522035239): `export DISPLAY=:0; xdotool key F11 sleep 1 key ctrl+l sleep 1 type 'https://google.com'; xdotool sleep 1 key KP_Enter; xdotool key F11`. Very crude. Very effective.
+
 ## Username and password
 
 If you need to login to a shell, the default username and password are `pi` and `raspberry`, as is tradition for Raspberry Pi. The `pi` user also has `sudo` access.
@@ -69,13 +76,15 @@ Press `Ctrl + Alt + F3` to get to a virtual terminal, and use your favorite edit
 
 Save the file, and `sudo reboot`.
 
+Note that on the Pi 4, you'll need to disable the `dtoverlay=vc4-fkms-v3d` line in `/boot/config.txt` for this to work. But then that [may cause other issues](https://www.reddit.com/r/raspberry_pi/comments/dw1376/dtoverlayvc4fkmsv3d_causes_display_to_shift_right/). This is hopefully fixed in a future Raspbian release.
+
 Exotic screens may require a bit more fiddling. See issues [#41](https://github.com/futurice/chilipie-kiosk/issues/41) and [#58](https://github.com/futurice/chilipie-kiosk/issues/58) for ideas.
 
 ## Replacing the boot graphics
 
 The image that's displayed while the kiosk is starting can be changed by just replacing `~/background.png`.
 
-To change the default chilipie-kiosk boot graphics to a nice doge, for example, try `wget -O background.png bit.ly/2w1P4Il`.
+To change the default chilipie-kiosk boot graphics to a [nice Windoge one](https://mcdn.wallpapersafari.com/medium/93/77/8xKLeg.png), for example, try `wget -O background.png https://bit.ly/2Q4GF1t`.
 
 ## Increasing boot show delay
 

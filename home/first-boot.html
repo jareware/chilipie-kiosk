@@ -923,15 +923,34 @@ github.com style (c) Vasily Polovnyov <vast@whiteants.net>
 </ul>
 <p>Finally, further tweaks can be made by changing the <a href="https://peter.sh/experiments/chromium-command-line-switches/">Chromium command line switches</a> in <code>~/.xsession</code>. For example:</p>
 <pre class="hljs"><code>--unsafely-treat-insecure-origin-as-secure=http:<span class="hljs-regexp">//</span>shady.example.com,http:<span class="hljs-regexp">//</span>another.example.com --user-data-dir=<span class="hljs-regexp">/home/</span>pi<span class="hljs-regexp">/.config/</span>chromium</code></pre><p>Adding these options will allow you to mix secure (i.e. HTTPS) origins with insecure ones (you need to specifically white-list them). Sometimes you need stuff like this to pull together all the bits and pieces of your dashboard from different origins. We&#39;re not saying you should. But you can.</p>
+<h2 id="controlling-the-kiosk-remotely"><a class="header-link" href="#controlling-the-kiosk-remotely"></a>Controlling the kiosk remotely</h2>
+<p>Sometimes you need to do basic remote adjustments, like changing the URL that&#39;s displayed.</p>
+<ul class="list">
+<li>If you need a lot of flexibility, <a href="https://github.com/futurice/chilipie-kiosk/issues/38#issuecomment-442031274">you can install VNC</a> to get a full remote desktop</li>
+<li>If you just need to set the URL, you can SSH over (not enabled by default; see above), and e.g. <a href="https://github.com/futurice/chilipie-kiosk/issues/71#issuecomment-522035239">run something like</a>: <code>export DISPLAY=:0; xdotool key F11 sleep 1 key ctrl+l sleep 1 type &#39;https://google.com&#39;; xdotool sleep 1 key KP_Enter; xdotool key F11</code>. Very crude. Very effective.</li>
+</ul>
 <h2 id="username-and-password"><a class="header-link" href="#username-and-password"></a>Username and password</h2>
 <p>If you need to login to a shell, the default username and password are <code>pi</code> and <code>raspberry</code>, as is tradition for Raspberry Pi. The <code>pi</code> user also has <code>sudo</code> access.</p>
 <h2 id="adjusting-your-resolution"><a class="header-link" href="#adjusting-your-resolution"></a>Adjusting your resolution</h2>
 <p>If the display auto-detection fails and chooses a funky default resolution for you, <a href="https://www.opentechguides.com/how-to/article/raspberry-pi/28/raspi-display-setting.html">there&#39;s a few things you can do</a> to try and fix that.</p>
+<h2 id="rotating-your-screen"><a class="header-link" href="#rotating-your-screen"></a>Rotating your screen</h2>
+<p>Press <code>Ctrl + Alt + F3</code> to get to a virtual terminal, and use your favorite editor to open <code>/boot/config.txt</code> (remember to use <code>sudo</code>). Add a line to the end of the file:</p>
+<ul class="list">
+<li><code>display_rotate=0</code> to disable rotation</li>
+<li><code>display_rotate=1</code> to rotate 90° clockwise</li>
+<li><code>display_rotate=2</code> to rotate 180°</li>
+<li><code>display_rotate=3</code> to rotate 90° counter-clockwise</li>
+</ul>
+<p>Save the file, and <code>sudo reboot</code>.</p>
+<p>Note that on the Pi 4, you&#39;ll need to disable the <code>dtoverlay=vc4-fkms-v3d</code> line in <code>/boot/config.txt</code> for this to work. But then that <a href="https://www.reddit.com/r/raspberry_pi/comments/dw1376/dtoverlayvc4fkmsv3d_causes_display_to_shift_right/">may cause other issues</a>. This is hopefully fixed in a future Raspbian release.</p>
+<p>Exotic screens may require a bit more fiddling. See issues <a href="https://github.com/futurice/chilipie-kiosk/issues/41">#41</a> and <a href="https://github.com/futurice/chilipie-kiosk/issues/58">#58</a> for ideas.</p>
 <h2 id="replacing-the-boot-graphics"><a class="header-link" href="#replacing-the-boot-graphics"></a>Replacing the boot graphics</h2>
 <p>The image that&#39;s displayed while the kiosk is starting can be changed by just replacing <code>~/background.png</code>.</p>
-<p>To change the default chilipie-kiosk boot graphics to a nice doge, for example, try <code>wget -O background.png bit.ly/2w1P4Il</code>.</p>
+<p>To change the default chilipie-kiosk boot graphics to a <a href="https://mcdn.wallpapersafari.com/medium/93/77/8xKLeg.png">nice Windoge one</a>, for example, try <code>wget -O background.png https://bit.ly/2Q4GF1t</code>.</p>
 <h2 id="increasing-boot-show-delay"><a class="header-link" href="#increasing-boot-show-delay"></a>Increasing boot show delay</h2>
 <p>By default, the browser window is hidden for a few seconds after boot, to give the page time to load. You can increase (or decrease) this delay in <code>~/.xsession</code>.</p>
-    </article>
+<h2 id="using-a-touch-screen"><a class="header-link" href="#using-a-touch-screen"></a>Using a touch screen</h2>
+<p>If your kiosk is interactive, and you&#39;re using a touch screen as a display, you may need to calibrate it. Press <code>Ctrl + Alt + F3</code> to get to a virtual terminal, and type:</p>
+<pre class="hljs"><code><span class="hljs-attr">DISPLAY</span>=:<span class="hljs-number">0</span> xinput_calibrator</code></pre>    </article>
   </body>
 </html>
