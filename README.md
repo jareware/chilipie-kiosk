@@ -62,6 +62,14 @@ network={
 }
 ```
 
+## Building
+
+### via [pimod](https://github.com/Nature40/pimod)
+
+```sh
+docker run --rm --privileged -v $PWD:/files nature40/pimod pimod.sh /files/chilipie-kiosk.pifile
+```
+
 ## Hardware
 
 Works with [all Raspberry Pi versions](https://www.raspberrypi.org/products/). Versions 3 and 4 are recommended, though, since the smaller ones can be a bit underpowered for rendering complex dashboards. The 3 and 4 also come with built-in WiFi, which is convenient (though both [official](https://www.raspberrypi.org/products/raspberry-pi-usb-wifi-dongle/) and [off-the-shelf](https://elinux.org/RPi_USB_Wi-Fi_Adapters) USB WiFi dongles can work equally well).
