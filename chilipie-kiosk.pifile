@@ -1,0 +1,77 @@
+FROM https://downloads.raspberrypi.org/raspios_lite_armhf/images/raspios_lite_armhf-2022-01-28/2022-01-28-raspios-bullseye-armhf-lite.zip
+
+# Increase the image by 1GB
+PUMP 1000M
+
+ENV LOCALE 'en_US.UTF-8\ UTF-8' # or e.g. "fi_FI.UTF-8\ UTF-8" for Finland
+ENV LANGUAGE 'en_US.UTF-8' # should match above
+ENV KEYBOARD 'us' # or e.g. "fi" for Finnish
+ENV TIMEZONE 'Etc/UTC' # or e.g. "Europe/Helsinki"; see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+# Setting locale
+# We want to do this as early as possible, so perl et al won't complain about misconfigured locales for the rest of the image prep
+RUN bash -c 'echo $LOCALE | tee /etc/locale.gen'
+RUN locale-gen
+RUN bash -c 'echo -e "LANGUAGE=$LANGUAGE\nLC_ALL=$LANGUAGE" | tee /etc/environment'
+
+# Setting hostname
+RUN bash -c 'echo "chilipie-kiosk" | tee /etc/hostname'
+RUN perl -i -p0e 's/raspberrypi/chilipie-kiosk/g' /etc/hosts
+
+# Enabling auto-login to CLI
+# From raspi-config: https://github.com/RPi-Distro/raspi-config/blob/d98686647ced7c0c0490dc123432834735d1c13d/raspi-config#L1313-L1321
+# See also: https://github.com/futurice/chilipie-kiosk/issues/61#issuecomment-524622522
+RUN systemctl set-default multi-user.target
+RUN ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty1.service
+RUN ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty2.service
+RUN ln -fs /lib/systemd/system/getty@.service /etc/systemd/system/getty.target.wants/getty@tty3.service
+RUN mkdir -p /etc/systemd/system/getty@tty1.service.d
+RUN mkdir -p /etc/systemd/system/getty@tty2.service.d
+RUN mkdir -p /etc/systemd/system/getty@tty3.service.d
+RUN bash -c 'echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n" | tee /etc/systemd/system/getty@tty1.service.d/autologin.conf'
+RUN bash -c 'echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n" | tee /etc/systemd/system/getty@tty2.service.d/autologin.conf'
+RUN bash -c 'echo -e "[Service]\nExecStart=\nExecStart=-/sbin/agetty --autologin pi --noclear %I \$TERM\n" | tee /etc/systemd/system/getty@tty3.service.d/autologin.conf'
+
+# Setting timezone
+RUN bash -c 'echo $TIMEZONE | tee /etc/timezone'
+RUN dpkg-reconfigure -f noninteractive tzdata
+
+# Setting keyboard layout
+RUN bash -c 'echo -e "XKBMODEL=pc105\nXKBLAYOUT=$KEYBOARD\nXKBVARIANT=\nXKBOPTIONS=\nBACKSPACE=guess" | tee /etc/default/keyboard'
+RUN dpkg-reconfigure -f noninteractive keyboard-configuration
+
+# Silencing console logins
+# this is to avoid a brief flash of the console login before X comes up
+RUN rm /etc/profile.d/sshpwd.sh /etc/profile.d/wifi-check.sh # remove warnings about default password and WiFi country (https://raspberrypi.stackexchange.com/a/105234)
+RUN touch .hushlogin # https://scribles.net/silent-boot-on-raspbian-stretch-in-console-mode/
+RUN perl -i -p0e 's#--autologin pi#--skip-login --noissue --login-options "-f pi"#g' /etc/systemd/system/getty@tty1.service.d/autologin.conf # "perl" is more cross-platform than "sed -i"
+
+# Installing packages
+RUN apt-get update
+RUN bash -c 'DEBIAN_FRONTEND=noninteractive apt-get install -y vim matchbox-window-manager unclutter mailutils nitrogen jq chromium-browser xserver-xorg xinit rpd-plym-splash xdotool rng-tools xinput-calibrator cec-utils'
+# We install mailutils just so that you can check "mail" for cronjob output
+
+# Setting home directory default content
+RUN rm -rfv /home/pi/*
+INSTALL /files/home /home/pi
+
+# Setting splash screen background
+RUN rm /usr/share/plymouth/themes/pix/splash.png
+RUN ln -s /home/pi/background.png /usr/share/plymouth/themes/pix/splash.png
+
+# Installing default crontab
+RUN crontab /home/pi/crontab.example
+
+# Making boot quieter (part 1)
+# https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
+RUN perl -i -p0e 's/#disable_overscan=1/disable_overscan=1/g' /boot/config.txt # "perl" is more cross-platform than "sed -i"
+RUN echo -e '\ndisable_splash=1' >> /boot/config.txt
+
+# Making boot quieter (part 2)
+# https://scribles.net/customizing-boot-up-screen-on-raspberry-pi/
+# You may want to revert these changes if you ever need to debug the startup process
+RUN perl -i -p0e 's/console=tty1/console=tty3/g' /boot/cmdline.txt
+RUN perl -i -p0e 's/$/ splash plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0/g' /boot/cmdline.txt
+
+# Fix permissions
+RUN chown -R pi:pi /home/pi
